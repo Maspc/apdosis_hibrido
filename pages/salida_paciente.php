@@ -7,10 +7,10 @@
 	layout::menu();
 	layout::ini_content();
 	
-	if (isset($_GET->userid)){
-	$userid = $_GET->userid;}
-	if (isset($_GET->session)){
-	$session = $_GET->session;}
+	if (isset($_GET['userid'])){
+	$userid = $_GET['userid'];}
+	if (isset($_GET['session'])){
+	$session = $_GET['session'];}
 	include('sesion_activa.php');
 	if ($estado_sesion == 'A') {
 	?>
@@ -39,7 +39,7 @@
 				</font></td>
 			</tr>
 		</table>
-		<form action="<?php $_SERVER->PHP_SELF; ?>" method="post" name="estado" id="estado">
+		<form action="<?php $_SERVER['PHP_SELF']; ?>" method="post" name="estado" id="estado">
             <center><h1>Salida del Paciente</h1></center>
 			<table width="780" border="0" cellspacing="0" >
 				
@@ -65,16 +65,17 @@
 			</table>
 		</form>
 		<?php     
-			if(isset($_POST->buscar)){
-				$historia = $_POST->historia;
-				//$tratamiento = $_POST->tratamiento;
-				$razon = $_POST->razon;
-				
+			if(isset($_POST['buscar'])){
+				$historia = $_POST['historia'];
+				//$tratamiento = $_POST['tratamiento'];
+				$razon = $_POST['razon'];
 				
 				
 				$resulta = salida_p::select1($historia);
 				
-				foreach($resulta as $rows7){
+				foreach($resulta as $rows7)
+				
+				{
 					if ($rows7->estado == 'E') {
 						$esta = 'ENVIADO A FARMACIA(SIN PROCESAR)';
 						}else if ($rows7->estado == 'P'){ 
@@ -87,8 +88,7 @@
 						$esta = 'Estado no definido';
 					}
 					echo "<p>";
-					echo "<input type='button' name='salida' value = 'Salida de Paciente' onClick=\"window.location.href='procesar_salida.php?tratamiento=".$tratamiento."&historia=".$historia."&userid=".$userid."&session=".$session."&razon=".$razon."'\"/>";
-					echo "<p>";
+					
 					
 					echo "<center><h1>No. de Orden ". $rows7->cargo."</h1></center>";
 					echo "<p><table border='1' align='center'>
@@ -102,6 +102,10 @@
 					
 					$tratamiento = $rows7->tratamiento;
 					
+					
+					echo "<input type='button' name='salida' value = 'Salida de Paciente' onClick=\"window.location.href='procesar_salida.php?tratamiento=".$tratamiento."&historia=".$historia."&userid=".$userid."&session=".$session."&razon=".$razon."'\"/>";
+					echo "<p>";
+					
 					echo "<tr>
 					<td>".$rows7->historia."</td>
 					<td>".$rows7->nombre_paciente."</td>
@@ -112,9 +116,8 @@
 					echo "</tr></table>";
 					
 					
+					$resulta2 =salida_p::select2($_POST['historia'],$rows7['cargo']);
 					
-					
-					$resulta2 = salida_p ::select2($_POST->historia,$rows7->cargo);
 					echo "<table border='1' align='center'>
 					<tr>
 					
@@ -126,8 +129,9 @@
 					<th>Cantidad Total</th>
 					<th>Estado del Medicamento</th>
 					</tr>";
+					foreach($resulta2 as $rows  )
 					
-					foreach($resulta2 as $rows){
+					{
 						if ($rows->estado == 'E') {
 							$esta1 = 'ENVIADO (SIN PROCESAR)';
 							}else if ($rows->estado == 'P'){ 
@@ -145,7 +149,7 @@
 						echo "<td>" . $rows->descripcion . "</td>";
 						echo "<td>" . $rows->dosis . "</td>";
 						echo "<td>" . $rows->horas . "</td>";
-						echo "<td>" . $rows->dias . "</td>";
+						echo "<td>" . $row->dias . "</td>";
 						echo "<td>" . $rows->cantidad . "</td>";
 						echo "<td><font color='green'><b>" . $esta1 . "</b></font></td>";
 						
@@ -158,15 +162,15 @@
 			
 			
 			
-			} else { 
 			
-		echo "<script language='javascript'>window.location='http://192.168.3.2/cmp_appdosis/'</script>"; } 
+			} else { 
+			echo "<script language='javascript'>window.location='http://192.168.3.2/cmp_appdosis/'</script>"; 
+		}
 		
 		layout::fin_content();
 	?>
-	
 	<script type="text/javascript">
 		function toggleDiv(divId) {
 			$("#"+divId).toggle();
 		}
-	</script>		
+	</script>	

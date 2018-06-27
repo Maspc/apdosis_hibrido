@@ -1,3 +1,10 @@
+<?php
+	ob_start();
+	include ('./clases/session.php');
+	require_once('../modulos/numero_fiscal_dev_cierre.php');
+	require_once('../modulos/layout.php');
+	layout::encabezado();
+?>
 <style type="text/css">
 	
 	.red {
@@ -23,14 +30,8 @@
 	font-weight: bold;
 	
 	}
-	
 </style>
 <?php
-	ob_start();
-	include ('./clases/session.php');
-	require_once('../modulos/devolucion_pub.php');
-	require_once('../modulos/layout.php');
-	layout::encabezado();
 	layout::menu();
 	layout::ini_content();
 	
@@ -57,11 +58,8 @@
 	
 	foreach($fh as $str)
 	
-    {
-		
+    {		
 		list($a,$b,$c,$d,$e,$f,$g,$h,$i,$j,$k)=explode("\t",$str);
-		
-		
 		
 		//echo "<li>".$g; //impresora
 		//echo "<li>".$h; //numero fiscal
@@ -87,18 +85,27 @@
 		
 		if ($g == '') {
 			
-			$berow = dvolucpub::select23($carpeta);
-			foreach($berow as $brw){
-				$g = $brw->nombre;	   
-			}
+			$beres=nfdc::select1($carpeta);
+			foreach( $beres as $berow)
+			
+			{
+				$g = $berow->nombre;	   
+			}	   
 			
 		}
-			
-		dvolucpub::update5($h,$g,$archivo,$devolucion);
-				
-		$wrow = dvolucpub::select24($devolucion);
-		foreach($wrow as $wrw){
-			$FA = $wrw->FA;
+		
+		
+		
+		nfdc::update1($h,$g,$archivo,$devolucion);
+		
+		
+		
+		
+		$wres= nfdc::select2($devolucion);	
+		foreach($wres as $wrow)
+		
+		{
+			$FA = $wres->FA;
 		}
 		
 		echo "<b>Se obtuvo correctamente el n&uacute;mero fiscal</b>";
@@ -116,5 +123,6 @@
 	
 ?>
 <p>
-<input type="button" class="white" value="Regresar" onclick="parent.location='facturacion.php'">
+	<input type="button" class="white" value="Regresar" onclick="parent.location='facturacion.php'">
+</body></html>
 <?=layout::fin_content()?>

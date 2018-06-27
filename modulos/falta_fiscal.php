@@ -4,14 +4,24 @@
 	class ffiscal{
 		
 		public static function select1() {
-			$reg = conexion::sqlGet("select factura.estado_factura, factura.factura, factura.total, factura.fecha, factura.ordenado_por,
-			factura.caja_id
-			from  factura where factura.factura_fiscal = ' ' and factura.estado_factura in ('I', 'F')");			
+			$reg = conexion::sqlGet("select factura.estado_factura, 
+			factura.factura, factura.total, factura.fecha, 
+			factura.ordenado_por,factura.caja_idfrom  factura where 
+			factura.factura_fiscal = ' ' and factura.estado_factura in 
+			('I', 'F') and factura.publico = 'S' and date(factura.fecha)
+			>= (curdate() -  interval 1 month)";
+			
 			return $reg;
-		}
+		}		
 		
 		public static function select2() {
-			$reg = conexion::sqlGet("select devolucion.estado, devolucion.devolucion, devolucion.total, devolucion.fecha_creacion from devolucion where  devolucion.estado in ('E', 'I') and devolucion.factura_fiscal = ' '");			
+			$reg = conexion::sqlGet("select devolucion.estado,
+			devolucion.devolucion, devolucion.total, 
+			devolucion.fecha_creacion from devolucion where 
+			devolucion.estado in ('E', 'I') and devolucion.factura_fiscal 
+			= ' ' and devolucion.publico = 'S' and date
+			(devolucion.fecha_creacion) >= (curdate() - 
+			interval 1 month)");		
 			return $reg;
 		}
 		

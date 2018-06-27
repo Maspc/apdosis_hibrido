@@ -1,17 +1,16 @@
 <?php
-	include('./clases/session.php');
+	include ('./clases/session.php');
 	require_once('../modulos/get_general.php');
 	
 	$q = strtolower($_GET["q"]);
 	if (!$q) return;
 	
-	$rsd = getgen::get_insumos1($q);
+	$rsd = getgen::get_insumo_edit_us($q);
 	$return_arr = array();
-	
+		
 	foreach($rsd as $rs){
-		$row_array['value'] = $rs->nombre; 
 		$row_array['codigo_interno'] = $rs->codigo_interno; 
-		$row_array['nombre'] = $rs->nombre; 
+		$row_array['value'] = $rs->nombre; 
 		$row_array['forma_farma'] = $rs->forma_farma; 
 		$row_array['tipo_posologia'] = $rs->tipo_posologia; 
 		$row_array['tipo_de_dosis'] = $rs->tipo_de_dosis; 
@@ -43,14 +42,18 @@
 		$row_array['grupo_medicamento'] = $rs->grupo_medicamento;
 		$row_array['multiple_principio'] = $rs->multiple_principio;
 		$row_array['tipo_impuesto'] = $rs->tipo_impuesto;
+		$row_array['codigo_enlace'] = $rs->codigo_enlace;
 		$row_array['precio_publico'] = $rs->precio_publico;
-		$row_array['importacion'] = $rs->importacion;
+		$row_array['sub_grupo'] = $rs->sub_grupo;
 		$row_array['jubilado'] = $rs->jubilado;
 		$row_array['descuento_total'] = $rs->descuento_total;
-		$row_array['ubicacion'] = $rs->ubicacion;
-		//echo "$mdesc|$mid|$mforma|$mposo|$mtipo|$mfdescr|$mposo2|$mcodi|$mpre|$mcom|$mgen|$mpres|$mcodpres|$mcantemp|$mvol|$mfab|$mcodfab|$mcosuni|$mpreuni|$mcoscaja|$mprecaja|$mcantini|$mtipodosis|$mtipodesc|$manti|$mnarco|$mprepa|$mdevol|$mcodprov|$mtipovol|$mgrupomed|$mmultiprin|$mtipoimp|$menlace|$mpreciopub|$msubgrupo|$mjubilado|$mdesctotal|$mcantmax\n";
-	    array_push($return_arr,$row_array);
+		$row_array['cant_max_prov'] = $rs->cant_max_prov;
+		$row_array['precio_unitario_pub'] = $rs->precio_unitario_pub;
+		$row_array['prod_hosp'] = $rs->prod_hosp;
+		$row_array['prod_pub'] = $rs->prod_pub;
+		//echo "$mdesc|$mid|$mforma|$mposo|$mtipo|$mfdescr|$mposo2|$mcodi|$mpre|$mcom|$mgen|$mpres|$mcodpres|$mcantemp|$mvol|$mfab|$mcodfab|$mcosuni|$mpreuni|$mcoscaja|$mprecaja|$mcantini|$mtipodosis|$mtipodesc|$manti|$mnarco|$mprepa|$mdevol|$mcodprov|$mtipovol|$mgrupomed|$mmultiprin|$mtipoimp|$menlace|$mpreciopub|$msubgrupo|$mjubilado|$mdesctotal|$mcantmax|$mpreciounitariopub|$mprodhosp|$mprodpub\n";
+		array_push($return_arr,$row_array);
 	}
 	echo json_encode(array('suggestions' =>$return_arr));
-	?>
-	
+?>
+

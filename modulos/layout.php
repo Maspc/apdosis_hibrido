@@ -98,49 +98,951 @@
 		}
 		
 		public static function menu() {
-			/*if (isset($_SESSION['MM_user'])){
-			$username = $_SESSION['MM_user'];}
-			else {
-				$username=' ';
+			
+			require_once('../modulos/menu1.php');
+			
+			$res = menu::select1();
+			foreach($res as $row){
+				$estado = $row->estado;
 			}
-			
-			if (isset($_SESSION['MM_iduser'])){
-			$userid = $_SESSION['MM_iduser'];}
-			
-			if (isset($_GET['session'])){
-			$session = $_GET['session'];}
-			
-			if (isset($_GET['usu_crea'])){
-			$usu_crea = $_GET['usu_crea'];}
-			
-			if (isset($_GET['historia'])){
-			$historia = $_GET['historia'];}*/			
 			
 			$reg ='<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">';
 			$reg .='<div class="menu_section">';
 			$reg .='<h3>General</h3>';
 			
 			
-			$reg .='<ul class="nav side-menu">';
+			if ($_SESSION['MM_tipo'] == 2) {
+				$reg .='<ul class="nav side-menu">';
+				if($estado != 'S'){ 
+					$reg .='<li><a 
+					href="cierre_carro_hospital.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+					} else {	
+					$reg .='<li><a href="cierre_carro_hospital_cierre.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+				} 
+				$reg .='<li><a href="falta_FA.php"><span><i class="fa fa-check"></i>Reenvio a Hospital</span></a>';
+				if($estado != 'S'){ 
+					$reg .='<li><a href="ver_devoluciones.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+					} else {	
+					$reg .='<li><a href="ver_devoluciones_cierre.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+				} 
+				$reg .='<li><a href="perfil_farmaceutico.php"><span><i class="fa fa-cart-plus"></i>Perfil Farmaceutico</span></a></li>';
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Insumos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_insumos.php">Agregar Insumos</a></li>';
+				$reg .='<li><a href="editar_insumo_us.php">Editar Insumos</a></li>';
+				$reg .='<li><a href="traslado_insumos.php">Traslado a Cuarto Esteril</a></li>';	
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				
+				$reg .='<li><a href="consulta_producto.php"><i class="fa fa-check"></i>Consulta Inventario</a></li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Parametros</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="impresoras_fiscales.php">Impresoras Fiscales</a></li>';
+				$reg .='<li><a href="principios_activos.php">Principios Activos</a></li>';		
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Cargos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cargos_pen.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Cargos Pendientes</a></li>';
+				$reg .='<li><a href="prep_pen.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Preparaciones Pendientes</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_inac.php"><i class="fa fa-cart-plus"></i>Consulta Historias Inactivas</span></a></li>';
+				$reg .='<li><a href="reimprimir_cargos.php"><i class="fa fa-check"></i>Reimprimir Cargos</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_fa.php"><i class="fa fa-check"></i>Búsqueda por FU</a></li>';
+				$reg .='<li><a href="estado_cargosf.php"><i class="fa fa-check"></i>Estado de Ordenes</a></li>';
+				$reg .='<li><a href="liberar_cargos.php"><i class="fa fa-check"></i>Liberar Cargo</a></li>';
+				$reg .='<li><a href="reactivar_paciente.php"><i class="fa fa-check"></i>Reactivar Pacientes</a></li>';
+				$reg .='<li><a href="facturacion_cargos.php"><i class="fa fa-check"></i>Cargos Manuales';
+				$reg .='<li><a href="devolucion_pub_manual.php"><i class="fa fa-check"></i>N/C Manuales</a></li>';
+				$reg .='</a></li>';	
+				$reg .='</ul></li>';	
+				
+				
+				$reg .='<li><a href="#"><span><i class="fa fa-cart-plus"></i>Naves</span></a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cierre_carro.php">Cerrar Naves</a></li>';
+				$reg .='<li><a href="reimprimir_mar.php">Reimprimir Naves</a></li>';
+				$reg .='<li><a href="reimprimir_banco.php">Reimprimir Banco</a></li>';
+				$reg .='<li><a href="conciliar_bancos.php">Conciliar Bancos</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Medicamentos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_medicamentos_us.php">Agregar Medicamentos</a></li>';
+				$reg .='<li><a href="editar_medicamentos_us.php">Editar Medicamentos</a></li>';
+				$reg .='<li><a href="imprimir_med.php" target="_blank">Listado de Medicamentos</a></li>';
+				$reg .='</ul></li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Inventario</a>';
+				$reg .='<ul class="nav child_menu"><li class="subfirst"><a href="editar_medicamentos_estado.php">Inactivar / Borrar Medicamentos</a></li>';
+				$reg .='<li><a href="compras_detalle.php">Ingreso de Mercancía</a></li>';	
+				$reg .='<li><a href="ajustes_inventario.php">Ajustes a Inventario</a></li>';
+				$reg .='<li><a href="editar_medicamentos_lotes.php">Ajustes a Lotes</a></li>';		
+				$reg .='</ul></li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Contabilidad</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li><a href="nota_debito.php">Notas de Debito</a></li>';
+				$reg .='<li><a href="nota_factura.php">Notas de Crédito Manual por Factura</a></li>'; 
+				$reg .='<li class="subfirst"><a href="reimprimir_fiscal.php">Reimprimir Factura Fiscal</a></li>';
+				
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Reportes</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="ventas_narcoticos.php">Narcoticos</a></li>';
+				$reg .='<li><a href="vendidos_x_bodega.php">Productos Vendidos por Banco</a></li>';
+				
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';		
+				$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
+				$reg .='</ul>';
+				} else if ($_SESSION['MM_tipo'] == 5) { 
+				$reg .='<ul class="nav side-menu">';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Cargos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cargos_pen.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Cargos Pendientes</a></li>';
+				$reg .='<li><a href="reimprimir_cargos.php"><i class="fa fa-check"></i>Reimprimir Cargos</a></li>';
+				$reg .='<li><a href="estado_cargosf.php"><i class="fa fa-check"></i>Estado de Ordenes</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_inac.php"><i class="fa fa-cart-plus"></i>Consulta Historias Inactivas</span></a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';			
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Medicamentos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_medicamentos_us.php">Agregar Medicamentos</a></li>';
+				$reg .='<li><a href="editar_medicamentos_us.php">Editar Medicamentos</a></li>';
+				$reg .='<li><a href="imprimir_med.php" target="_blank">Listado de Medicamentos</a></li>';
+				$reg .='</ul></li>';		
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';	
+				$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
+				$reg .='</ul>';
+				} else  if ($_SESSION['MM_tipo'] == 3) { 
+				$reg .='<ul class="nav child_menu">';
+				if($estado != 'S'){ 
+					$reg .='<li><a href="ver_devoluciones.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+					} else {	
+					$reg .='<li><a href="ver_devoluciones_cierre.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+				} 
+				$reg .='<li><a href="perfil_farmaceutico.php"><span><i class="fa fa-cart-plus"></i>Perfil Farmaceutico</span></a></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Cargos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cargos_pen.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Cargos Pendientes</a></li>';
+				$reg .='<li><a href="reimprimir_cargos.php"><i class="fa fa-check"></i>Reimprimir Cargos</a></li>';
+				$reg .='<li><a href="estado_cargosf.php"><i class="fa fa-check"></i>Estado de Ordenes</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_inac.php"><i class="fa fa-cart-plus"></i>Consulta Historias Inactivas</span></a></li>';
+				
+				$reg .='</ul></li>';	
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Medicamentos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_medicamentos_us.php">Agregar Medicamentos</a></li>';
+				$reg .='<li><a href="editar_medicamentos_us.php">Editar Medicamentos</a></li>';
+				$reg .='</ul></li>';	
+				$reg .='<li><a href="#"><span><i class="fa fa-cart-plus"></i>Naves</span></a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cierre_carro.php">Cerrar Naves</a></li>';
+				$reg .='<li><a href="reimprimir_mar.php">Reimprimir Naves</a></li>';
+				$reg .='<li><a href="reimprimir_banco.php">Reimprimir Bancos</a></li>';
+				$reg .='<li><a href="conciliar_bancos.php">Conciliar Bancos</a></li>';
+				$reg .='</ul></li>';				
+				$reg .='<li><a href="#"><span><i class="fa fa-cart-plus"></i>Naves</span></a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cierre_carro.php">Cerrar Naves</a></li>';
+				$reg .='<li><a href="reimprimir_mar.php">Reimprimir Naves</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Compras</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="orden_compras_detalle.php">Pedidos Manuales</a></li>';
+				$reg .='<li><a href="inventario_bajo.php">Pedidos Automáticos</a></li>';
+				$reg .='<li><a href="procesar_orden_compra.php">Procesar Pedidos</a></li>';
+				$reg .='<li><a href="procesar_compra_credito.php">Nota de Crédito Pendiente</a></li>';
+				$reg .='<li><a href="anular_orden_compra.php">Anular Pedido</a></li>';
+				$reg .='<li><a href="caja_menuda.php">Recibos de Caja</a></li>';
+				$reg .='</ul>';
+				$reg .='</li>';				
+				/*	$reg .='<li class="toplast"><a href="#"><i class="fa fa-cart-plus"></i>Inventario</a>';
+					$reg .='<ul class="nav child_menu">';
+					$reg .='<li class="subfirst"><a href="imprimir_med.php">Listado de Medicamentos</a></li>';
+					$reg .='<li><a href="inventario_x_bodega.php">Inventario por Bodega</a></li>';
+					$reg .='<li><a href="compras_detalle.php">Ingreso de Mercancía</a></li>';
+					$reg .='<li><a href="imprimir_inv.php">Inventario Total de Medicamentos</a></li>';
+					$reg .='<li><a href="imprimir_pre.php">Precios de Medicamentos</a></li>';
+					$reg .='</ul>'; 
+				</li>'; */
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';	
+				$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
+				$reg .='</ul>';
+				
+				} else  if ($_SESSION['MM_tipo'] == 4) {   
+				$reg .='<ul class="nav side-menu">';
+				$reg .='<li><a href="facturas_paciente.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Facturas por Paciente</a></li>';
+				
+				if($estado != 'S'){ 
+					$reg .='<li><a href="cierre_carro_hospital.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+					} else {	
+					$reg .='<li><a href="cierre_carro_hospital_cierre.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+				} 
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';	
+				$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
+				
+				$reg .='</ul>';
+				} else  if ($_SESSION['MM_tipo'] == 1) {  
+				$reg .='<ul class="nav side-menu">';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>P&uacute;blico</a>';
+				$reg .='<ul class="nav child_menu">';
+				
+				$reg .='<li class="subfirst"><a href="facturacion.php"><span><i class="fa fa-cart-plus"></i>Facturaci&oacute;n</a></li>';
+				$reg .='<li><a href="agregar_clientes.php"><span><i class="fa fa-cart-plus"></i>Agregar Clientes</a></li>';
+				$reg .='<li><a href="facturacion_credito.php"><span><i class="fa fa-cart-plus"></i>Pagos a Cr&eacute;dito</a></li>';
+				$reg .='<li><a href="cotizacion.php"><span><i class="fa fa-cart-plus"></i>Cotizaci&oacute;n</a></li>';
+				$reg .='<li><a href="devolucion_pub.php"><span><i class="fa fa-cart-plus"></i>Devolucion</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				
+				/*	reg .='<li><a href="perfil_farmaceutico.php"><span><i class="fa fa-cart-plus"></i>Perfil Farmaceutico</span></a></li>';
+				reg .='<li><a href="ver_devoluciones.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li> */
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				
+				$reg .='<li><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="consulta_producto.php"><i class="fa fa-check"></i>Consulta Inventario</a></li>';
+				
+				
+				$reg .='<li><a href="factura_diaria.php"><i class="fa fa-check"></i>Facturas Diarias</a></li>';
+				$reg .='<li><a href="falta_FA.php"><span><i class="fa fa-check"></i>Reenvio a Hospital</span></a>';
+				
+				$reg .='<li><a href="perfil_farmaceutico.php"><span><i class="fa fa-cart-plus"></i>Perfil Farmaceutico</span></a></li>';
+				if($estado != 'S'){ 
+					$reg .='<li class="tomenu"><a href="cierre_carro_hospital.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+					} else {	
+					$reg .='<li><a href="cierre_carro_hospital_cierre.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+				} 
+				if($estado != 'S'){ 
+					$reg .='<li><a href="ver_devoluciones.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+					} else {	
+					$reg .='<li><a href="ver_devoluciones_cierre.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+				} 
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Cargos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cargos_pen.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Cargos Pendientes</a></li>';
+				$reg .='<li><a href="prep_pen.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Preparaciones Pendientes</a></li>';
+				$reg .='<li><a href="reimprimir_cargos.php"><i class="fa fa-check"></i>Reimprimir Cargos</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f.php"><i class="fa fa-check"></i>Estado de Ordenes</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_fa.php"><i class="fa fa-check"></i>Búsqueda por FU</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_inac.php"><i class="fa fa-cart-plus"></i>Consulta Historias Inactivas</span></a></li>';
+				$reg .='<li><a href="liberar_cargos.php"><i class="fa fa-check"></i>Liberar Cargo</a></li>';
+				$reg .='<li><a href="liberar_historia.php"><i class="fa fa-check"></i>Liberar Historia</a></li>';
+				$reg .='<li><a href="reactivar_paciente.php"><i class="fa fa-check"></i>Reactivar Pacientes</span></a></li>';
+				$reg .='<li><a href="facturacion_cargos.php"><i class="fa fa-check"></i>Cargos Manuales</a></li>';
+				$reg .='<li><a href="devolucion_pub_manual.php"><i class="fa fa-check"></i>N/C Manuales</a></li>';
+				$reg .='</ul></li>';	
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Usuarios</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="usuarios.php"><i class="fa fa-check"></i>Creación de Usuarios</a></li>';
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';	
+				$reg .='<li><a href="usuarios_editar.php"><span><i class="fa fa-check"></i>Editar Usuarios</span></a></li>';	
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Art&iacute;culos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_medicamentos_us.php">Agregar Medicamentos</a></li>';
+				$reg .='<li><a href="editar_medicamentos_us.php">Editar Medicamentos</a></li>';
+				$reg .='<li ><a href="agregar_insumos.php">Agregar Productos</a></li>';
+				$reg .='<li><a href="editar_insumo_us.php">Editar Productos</a></li>';
+				$reg .='<li><a href="editar_medicamentos_cb.php">Imprimir Label Producto</a></li>';
+				$reg .='<li><a href="editar_medicamentos_cba.php">Imprimir Label Precio</a></li>';
+				/* <li><a href="editar_costo_insumo.php">Costo por Grupo</a></li>'; */
+				$reg .='</ul></li>';	
+				
+				$reg .='<li><a href="#"><span><i class="fa fa-cart-plus"></i>Naves</span></a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cierre_carro.php">Cerrar Naves</a></li>';
+				$reg .='<li><a href="reimprimir_mar.php">Reimprimir Naves</a></li>';
+				$reg .='<li><a href="reimprimir_banco.php">Reimprimir Bancos</a></li>';
+				$reg .='<li><a href="conciliar_bancos.php">Conciliar Bancos</a></li>';
+				
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Parametros</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="formas_farma.php">Formas Farmaceuticas</a></li>';
+				$reg .='<li><a href="contraindica.php">Contraindicaciones</a></li>';
+				/*	<li><a href="fabricantes.php">Fabricantes</a></li>'; */
+				$reg .='<li><a href="posologias.php">Concentracion</a></li>';
+				$reg .='<li><a href="principios_activos.php">Principios Activos</a></li>';
+				$reg .='<li><a href="bancos.php">Bancos</a></li>';
+				$reg .='<li><a href="proveedores.php">Proveedores</a></li>';
+				$reg .='<li><a href="proveedores_caja.php">Proveedores de Caja</a></li>';
+				$reg .='<li><a href="presentacion.php">Presentaciones</a></li>';
+				$reg .='<li><a href="editar_costo_insumo_pub.php">Parametros por Grupo</a></li>';
+				$reg .='<li><a href="impresoras_fiscales.php">Impresoras Fiscales</a></li>';
+				$reg .='<li><a href="aseguradora.php">Aseguradoras</a></li>';
+				/*	<li><a href="param_carros.php">Horas de Naves</a></li>'; !*/
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Insumos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_insumos.php">Agregar Insumos</a></li>';
+				$reg .='<li><a href="editar_insumo_us.php">Editar Insumos</a></li>';
+				$reg .='<li><a href="traslado_insumos.php">Traslado a Cuarto Esteril</a></li>';	
+				$reg .='<li><a href="editar_costo_insumo.php">Costo por Grupo</a></li>';
+				$reg .='</ul>';
+				$reg .='</li>';	
+				
+				
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Compras</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="orden_compras_detalle.php">Pedidos Manuales</a></li>';
+				$reg .='<li><a href="inventario_bajo.php">Pedidos Automáticos</a></li>';
+				$reg .='<li><a href="procesar_orden_compra.php">Procesar Pedidos</a></li>';
+				$reg .='<li><a href="procesar_compra_credito.php">Nota de Crédito Pendiente</a></li>';
+				$reg .='<li><a href="anular_orden_compra.php">Anular Pedido</a></li>';
+				$reg .='<li><a href="reimprimir_compra.php">Reimprimir Orden de Compra</a></li>';
+				$reg .='<li><a href="reimprimir_compra_r.php">Reimprimir Compra (Ingreso de Mercancía)</a></li>';
+				$reg .='<li><a href="imprimir_med_pend_compra.php">Listado de Medicamentos Pendiente en O/C</a></li>';
+				$reg .='<li><a href="caja_menuda.php">Recibos de Caja</a></li>';
+				$reg .='<li><a href="reporte_caja.php">Reporte de Caja</a></li>';
+				$reg .='<li><a href="cierre_caja.php">Cierre de Caja</a></li>';
+				$reg .='</ul>';
+				$reg .='</li>';	
+				
+				
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Inventario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="editar_medicamentos_estado.php">Inactivar / Borrar Medicamentos</a></li>';
+				$reg .='<li><a href="inventario_x_bodega.php">Inventario por Bodega</a></li>';
+				$reg .='<li><a href="editar_inventario_bodega.php">Editar Inventario por Bodega</a></li>';
+				$reg .='<li><a href="compras_detalle.php">Ingreso de Mercancía</a></li>';		
+				$reg .='<li><a href="imprimir_inv.php" target="_blank">Inventario Total de Medicamentos</a></li>';
+				/* <li><a href="imprimir_inv_costo.php" target="_blank">Inventario y Costo Total de Medicamentos</a></li>'; */
+				$reg .='<li><a href="imprimir_inv_costo_xls.php" target="_blank">Inventario y Costo Total de Medicamentos XLS</a></li>';
+				$reg .='<li><a href="editar_medicamentos_inv.php">Editar Precio</a></li>';
+				/*	<li><a href="ajustes_inventario.php">Ajustes a Inventario</a></li>'; */
+				$reg .='<li><a href="orden_compras_detalle_ext.php">Solicitar Mercanc&iacute;a Bodegas Externas</a></li>'; 
+				$reg .='<li><a href="orden_pen.php">Ordenes a Procesar Externas</a></li>'; 
+				$reg .='<li><a href="editar_medicamentos_lotes.php">Ajustes a Lotes</a></li>';
+				$reg .='<li><a href="traslado_detalle.php">Traslado entre Bodegas</a></li>';
+				$reg .='<li><a href="traslado_ins_med.php">Traslado de Insumos a Medicamentos</a></li>';
+				$reg .='<li><a href="traslado_med_ins.php">Traslado de Medicamentos a Insumos</a></li>';
+				$reg .='<li><a href="devolucion_vencimiento.php">Devolucion a Proveedores</a></li>';
+				
+				
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Conteo F&iacute;sico</a>';
+				$reg .='<ul class="nav child_menu">';
+				/*  $reg .='<li class="subfirst"><a href="apertura_cierre_anaquel.php">Conteo de Anaqueles</a></li>'; */
+				$reg .='<li><a href="conteo_inventario.php">Conteo de Inventario</a></li>';
+				$reg .='<li><a href="imprimir_conteo_xls.php">Reporte por Anaquel</a></li>';
+				$reg .='<li><a href="imprimir_conteo_sum_xls.php">Reporte por Producto</a></li>';
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Contabilidad</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="estado_cargosatc_id.php">Movimientos por Fecha</a></li>';
+				$reg .='<li><a href="devoluciones_diarias_con.php">Devoluciones Diarias (N/C)</a></li>';
+				$reg .='<li><a href="ventas_impuesto.php">Impuesto por Ventas</a></li>';
+				$reg .='<li><a href="compras_impuesto.php">Impuesto por Compras</a></li>';
+				$reg .='<li><a href="reporte_z.php">Corte Z y X Hospitalario</a></li>';
+				$reg .='<li><a href="reporte_z_caja.php">Corte Z y X Publico</a></li>';
+				$reg .='<li><a href="ordenes_mercancia.php">Ordenes de Mercancia Procesadas</a></li>';
+				$reg .='<li><a href="nota_debito.php">Notas de Debito</a></li>';
+				$reg .='<li><a href="nota_factura.php">Notas de Crédito Manual por Factura</a></li>';
+				$reg .='<li><a href="reimprimir_fiscal.php">Reimprimir Factura Fiscal</a></li>';
+				$reg .='<li><a href="reimprimir_fiscal_dev.php">Reimprimir Nota de Credito Fiscal</a></li>';
+				$reg .='<li><a href="ventas_xero.php">Ventas a Xero</a></li>';
+				$reg .='<li><a href="compras_xero.php">Compras a Xero</a></li>';
+				
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Reportes</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="ventas_narcoticos.php">Narcoticos</a></li>';
+				$reg .='<li><a href="mas_vendidos.php">Productos Más Vendidos</a></li>';
+				$reg .='<li><a href="vendidos_x_area.php">Productos Vendidos por Área</a></li>';
+				$reg .='<li><a href="vendidos_x_bodega.php">Productos Vendidos por Banco</a></li>';
+				$reg .='<li><a href="tiempo_respuesta.php">Tiempos de Respuesta</a></li>';
+				$reg .='<li><a href="sugerencias_farma.php">Sugerencias de Hospital</a></li>';
+				$reg .='<li><a href="imprimir_med_snposo.php">Medicamentos sin Posología</a></li>';
+				$reg .='<li><a href="imprimir_med_sninve.php">Medicamentos sin Inv. Crítico/Mínimo</a></li>';
+				$reg .='<li><a href="historico_movimientos.php">Historico de Movimientos por Producto</a></li>';
+				$reg .='<li><a href="vencimiento.php">Medicamentos a Tres Meses o Menos de Vencimiento</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Reportes 2</a>';
+				$reg .='<ul class="nav child_menu">';
+				
+				$reg .='<li class="subfirst"><a href="imprimir_med.php" target="_blank">Listado de Medicamentos</a></li>';
+				$reg .='<li><a href="imprimir_medicamento_xls.php">Listado Medicamentos XLS</a></li>';
+				$reg .='<li><a href="imprimir_med_imp.php" target="_blank">Listado de Medicamentos de Importación</a></li>';
+				$reg .='<li><a href="imprimir_medicamentogenerico_xls.php">Listado Medicamentos Generico XLS</a></li>';
+				$reg .='<li><a href="imprimir_medicamentoprecio_xls.php">Listado Medicamentos con Precio y Cantidad XLS</a></li>';
+				$reg .='<li><a href="imprimir_medicamentoprecious_xls.php">Listado Medicamentos para USPSG XLS</a></li>';
+				$reg .='<li><a href="imprimir_ins.php" target="_blank">Inventario Total de Insumos</a></li>';
+				$reg .='<li><a href="imprimir_pre.php" target="_blank">Precios de Medicamentos</a></li>';
+				$reg .='<li><a href="reporte_cambio_costo.php">Cambio de Costo por Medicamento</a></li>';
+				$reg .='<li><a href="reporte_ventas.php">Reporte de Ventas XLS</a></li>';
+				$reg .='<li><a href="cambio_costo_fecha.php">Variación de Costos por Fecha</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				
+				
+				
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Clientes</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_clientes.php">Agregar Clientes</a></li>';
+				$reg .='<li><a href="editar_clientes_us.php">Editar Clientes</a></li>';
+				$reg .='<li><a href="tipo_clientes.php">Tipos de Clientes</a></li>';
+				/*	<li><a href="pago_creditos.php">Pago a Créditos</a></li>'; */
+				$reg .='<li><a href="listado_clientes.php">Listado de Clientes</a></li>';
+				$reg .='<li><a href="estados_cuenta.php">Estados de Cuenta</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';		
+				$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
+				
+				$reg .='</ul>';
+				} else  if ($_SESSION['MM_tipo'] == 6) {  
+				$reg .='<ul class="nav side-menu">';
+				if($estado != 'S'){ 
+					$reg .='<li><a href="cierre_carro_hospital.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+					} else {	
+					$reg .='<li><a href="cierre_carro_hospital_cierre.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+				} 
+				if($estado != 'S'){ 
+					$reg .='<li><a href="ver_devoluciones.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+					} else {	
+					$reg .='<li><a href="ver_devoluciones_cierre.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+				} 
+				$reg .='<li><a href="falta_FA.php"><span><i class="fa fa-check"></i>Reenvio a Hospital</span></a></li>';
+				$reg .='<li><a href="facturacion_cargos.php"><span><i class="fa fa-check"></i>Cargos Manuales</span></a></li>';	
+				$reg .='<li><a href="devolucion_pub_manual.php"><span><i class="fa fa-check"></i>N/C Manuales</span></a></li>';	
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Compras</a>';
+				$reg .='<ul class="nav child_menu">';
+				
+				$reg .='<li><a href="caja_menuda.php">Recibos de Caja</a></li>';
+				$reg .='<li><a href="reporte_caja.php">Reporte de Caja</a></li>';
+				$reg .='<li><a href="cierre_caja.php">Cierre de Caja</a></li>';
+				$reg .='</ul>';
+				$reg .='</li>';	
+				
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Contabilidad</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="estado_cargosatc_id.php">Movimientos por Fecha</a></li>';
+				$reg .='<li class="subfirst"><a href="estado_cargosatc_jub.php">Descuentos a Jubilados</a></li>';
+				$reg .='<li class="subfirst"><a href="estado_cargosatc_aseg.php">Descuentos por Aseguradoras</a></li>';
+				$reg .='<li><a href="devoluciones_diarias_con.php">Devoluciones Diarias (N/C)</a></li>';
+				$reg .='<li><a href="ventas_impuesto.php">Impuesto por Ventas</a></li>';
+				$reg .='<li><a href="compras_impuesto.php">Impuesto por Compras</a></li>';
+				$reg .='<li><a href="reporte_z.php">Corte Z y X</a></li>';
+				$reg .='<li><a href="ordenes_mercancia.php">Ordenes de Mercancia Procesadas</a></li>';
+				$reg .='<li><a href="nota_debito.php">Notas de Debito</a></li>';
+				$reg .='<li><a href="nota_factura.php">Notas de Crédito Manual por Factura</a></li>';
+				$reg .='<li><a href="reimprimir_fiscal.php">Reimprimir Factura Fiscal</a></li>';
+				$reg .='<li><a href="reimprimir_fiscal_dev.php">Reimprimir Nota de Credito Fiscal</a></li>';
+				$reg .='</ul>';
+				$reg .='<li><a href="estado_cargosatc_f.php"><span><i class="fa fa-cart-plus"></i>Estado de Cargos</span></a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_fa.php"><i class="fa fa-check"></i>Búsqueda por FU</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_inac.php"><span><i class="fa fa-cart-plus"></i>Consulta Historias Inactivas</span></a></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Parametros</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="impresoras_fiscales.php">Impresoras Fiscales</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="consulta_producto.php"><i class="fa fa-check"></i>Consulta Inventario</a></li>';
+				
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';
+				$reg .='<li><a href="db_backup.php"><span><i class="fa fa-check"></i>Backup</span></a></li>';	
+				$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
+				
+				$reg .='</ul>';
+				
+				} else if ($_SESSION['MM_tipo'] == 7) { 
+				$reg .='<ul class="nav side-menu">';
+				if($estado != 'S'){ 
+					$reg .='<li><a href="cierre_carro_hospital.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+					} else {	
+					$reg .='<li><a href="cierre_carro_hospital_cierre.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+				} 
+				$reg .='<li><a href="falta_FA.php"><span><i class="fa fa-check"></i>Reenvio a Hospital</span></a>';
+				$reg .='<li><a href="ver_devoluciones.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+				$reg .='<li><a href="perfil_farmaceutico.php"><span><i class="fa fa-cart-plus"></i>Perfil Farmaceutico</span></a></li>';
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Insumos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_insumos.php">Agregar Insumos</a></li>';
+				$reg .='<li><a href="editar_insumo_us.php">Editar Insumos</a></li>';
+				$reg .='<li><a href="traslado_insumos.php">Traslado a Cuarto Esteril</a></li>';	
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Parametros</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="impresoras_fiscales.php">Impresoras Fiscales</a></li>';
+				$reg .='<li><a href="principios_activos.php">Principios Activos</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Cargos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cargos_pen.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Cargos Pendientes</a></li>';
+				$reg .='<li><a href="prep_pen.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Preparaciones Pendientes</a></li>';
+				$reg .='<li><a href="reimprimir_cargos.php"><i class="fa fa-check"></i>Reimprimir Cargos</a></li>';
+				$reg .='<li><a href="estado_cargosf.php"><i class="fa fa-check"></i>Estado de Ordenes</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_fa.php"><i class="fa fa-check"></i>Búsqueda por FU</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_inac.php"><i class="fa fa-cart-plus"></i>Consulta Historias Inactivas</span></a></li>';
+				$reg .='<li><a href="liberar_cargos.php"><i class="fa fa-check"></i>Liberar Cargo</a></li>';
+				$reg .='</ul></li>';	
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='</li>';
+				$reg .='<li><a href="consulta_producto.php"><i class="fa fa-check"></i>Consulta Inventario</a></li>';
+				
+				$reg .='<li><a href="#"><span><i class="fa fa-cart-plus"></i>Naves</span></a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cierre_carro.php">Cerrar Naves</a></li>';
+				$reg .='<li><a href="reimprimir_mar.php">Reimprimir Naves</a></li>';
+				$reg .='<li><a href="reimprimir_banco.php">Reimprimir Bancos</a></li>';
+				$reg .='<li><a href="conciliar_bancos.php">Conciliar Bancos</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Medicamentos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_medicamentos_us.php">Agregar Medicamentos</a></li>';
+				$reg .='<li><a href="editar_medicamentos_us.php">Editar Medicamentos</a></li>';
+				$reg .='<li><a href="imprimir_med.php" target="_blank">Listado de Medicamentos</a></li>';
+				$reg .='</ul></li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Compras</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="orden_compras_detalle.php">Pedidos Manuales</a></li>';
+				$reg .='<li><a href="inventario_bajo.php">Pedidos Automáticos</a></li>';
+				$reg .='<li><a href="anular_orden_compra.php">Anular Pedido</a></li>';
+				$reg .='<li><a href="reimprimir_compra.php">Reimprimir Orden de Compra</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';	
+				
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Inventario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst">';
+				$reg .='<li><a href="compras_detalle.php">Ingreso de Mercancía</a></li>';		
+				$reg .='</ul></li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Contabilidad</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li><a href="nota_debito.php">Notas de Debito</a></li>';
+				$reg .='<li><a href="nota_factura.php">Notas de Crédito Manual por Factura</a></li>';
+				$reg .='<li class="subfirst"><a href="reimprimir_fiscal.php">Reimprimir Factura Fiscal</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Reportes</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="ventas_narcoticos.php">Narcoticos</a></li>';
+				$reg .='<li><a href="vendidos_x_bodega.php">Productos Vendidos por Banco</a></li>';
+				
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';		
+				$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
+				$reg .='</ul>';
+				} else if ($_SESSION['MM_tipo'] == 8) { 
+				$reg .='<ul class="nav side-menu">';
+				if($estado != 'S'){ 
+					$reg .='<li><a href="cierre_carro_hospital.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+					} else {	
+					$reg .='<li><a href="cierre_carro_hospital_cierre.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+				} 
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="falta_FA.php"><span><i class="fa fa-check"></i>Reenvio a Hospital</span></a>';
+				if($estado != 'S'){ 
+					$reg .='<li><a href="ver_devoluciones.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+					} else {	
+					$reg .='<li><a href="ver_devoluciones_cierre.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+				} 
+				$reg .='<li><a href="perfil_farmaceutico.php"><span><i class="fa fa-cart-plus"></i>Perfil Farmaceutico</span></a></li>';
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Insumos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_insumos.php">Agregar Insumos</a></li>';
+				$reg .='<li><a href="editar_insumo_us.php">Editar Insumos</a></li>';
+				$reg .='<li><a href="traslado_insumos.php">Traslado a Cuarto Esteril</a></li>';	
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Parametros</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="impresoras_fiscales.php">Impresoras Fiscales</a></li>';
+				$reg .='<li><a href="principios_activos.php">Principios Activos</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Cargos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cargos_pen.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Cargos Pendientes</a></li>';
+				$reg .='<li><a href="prep_pen.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Preparaciones Pendientes</a></li>';
+				$reg .='<li><a href="reimprimir_cargos.php"><i class="fa fa-check"></i>Reimprimir Cargos</a></li>';
+				$reg .='<li><a href="estado_cargosf.php"><i class="fa fa-check"></i>Estado de Ordenes</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_fa.php"><i class="fa fa-check"></i>Búsqueda por FU</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_inac.php"><i class="fa fa-cart-plus"></i>Consulta Historias Inactivas</span></a></li>';
+				$reg .='<li><a href="liberar_cargos.php"><i class="fa fa-check"></i>Liberar Cargo</a></li>';
+				
+				$reg .='</ul></li>';	
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='</li>';
+				$reg .='<li><a href="consulta_producto.php"><i class="fa fa-check"></i>Consulta Inventario</a></li>';
+				
+				$reg .='<li><a href="#"><span><i class="fa fa-cart-plus"></i>Naves</span></a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cierre_carro.php">Cerrar Naves</a></li>';
+				$reg .='<li><a href="reimprimir_mar.php">Reimprimir Naves</a></li>';
+				$reg .='<li><a href="reimprimir_banco.php">Reimprimir Bancos</a></li>';
+				$reg .='<li><a href="conciliar_bancos.php">Conciliar Bancos</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Medicamentos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_medicamentos_us.php">Agregar Medicamentos</a></li>';
+				$reg .='<li><a href="editar_medicamentos_us.php">Editar Medicamentos</a></li>';
+				$reg .='<li><a href="imprimir_med.php" target="_blank">Listado de Medicamentos</a></li>';
+				$reg .='</ul></li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Compras</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="procesar_orden_compra.php">Procesar Pedidos</a></li>';
+				$reg .='<li><a href="reimprimir_compra.php">Reimprimir Orden de Compra</a></li>';
+				$reg .='<li><a href="reimprimir_compra_r.php">Reimprimir Compra (Ingreso de Mercancía)</a></li>';
+				$reg .='<li><a href="imprimir_med_pend_compra.php">Listado de Medicamentos Pendiente en O/C</a></li>';
+				$reg .='<li><a href="devolucion_vencimiento.php">Devolucion a Proveedores</a></li>';
+				$reg .='</ul>';
+				$reg .='</li>';	
+				
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Inventario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst">';
+				$reg .='<a href="compras_detalle.php">Ingreso de Mercancía</a></li>';	
+				$reg .='<li><a href="traslado_ins_med.php">Traslado de Insumos a Medicamentos</a></li>';
+				$reg .='<li><a href="traslado_med_ins.php">Traslado de Medicamentos a Insumos</a></li>';	
+				$reg .='</ul></li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Contabilidad</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li><a href="nota_debito.php">Notas de Debito</a></li>';
+				$reg .='<li><a href="nota_factura.php">Notas de Crédito Manual por Factura</a></li>';
+				$reg .='<li class="subfirst"><a href="reimprimir_fiscal.php">Reimprimir Factura Fiscal</a></li>';
+				
+				
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Reportes</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="ventas_narcoticos.php">Narcoticos</a></li>';
+				$reg .='<li><a href="vendidos_x_bodega.php">Productos Vendidos por Banco</a></li>';
+				
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				
+				
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';		
+				$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
+				$reg .='</ul>';
+				} else if ($_SESSION['MM_tipo'] == 9) { 
+				$reg .='<ul class="nav side-menu">';
+				if($estado != 'S'){ 
+					$reg .='<li><a href="cierre_carro_hospital.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+					} else {	
+					$reg .='<li><a href="cierre_carro_hospital_cierre.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+				} 
+				$reg .='<li><a href="falta_FA.php"><span><i class="fa fa-check"></i>Reenvio a Hospital</span></a>';
+				if($estado != 'S'){ 
+					$reg .='<li><a href="ver_devoluciones.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+					} else {	
+					$reg .='<li><a href="ver_devoluciones_cierre.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+				} 
+				$reg .='<li><a href="perfil_farmaceutico.php"><span><i class="fa fa-cart-plus"></i>Perfil Farmaceutico</span></a></li>';
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Insumos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_insumos.php">Agregar Insumos</a></li>';
+				$reg .='<li><a href="editar_insumo_us.php">Editar Insumos</a></li>';
+				$reg .='<li><a href="traslado_insumos.php">Traslado a Cuarto Esteril</a></li>';	
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Parametros</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="impresoras_fiscales.php">Impresoras Fiscales</a></li>';
+				$reg .='<li><a href="principios_activos.php">Principios Activos</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Cargos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cargos_pen.php"><img src="default.htm_files/css3menu1/home.png" alt=""/> Cargos Pendientes</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_inac.php"><i class="fa fa-cart-plus"></i>Consulta Historias Inactivas</span></a></li>';
+				$reg .='<li><a href="reimprimir_cargos.php"><i class="fa fa-check"></i>Reimprimir Cargos</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_fa.php"><i class="fa fa-check"></i>Búsqueda por FU</a></li>';
+				$reg .='<li><a href="estado_cargosf.php"><i class="fa fa-check"></i>Estado de Ordenes</a></li>';
+				$reg .='<li><a href="liberar_cargos.php"><i class="fa fa-check"></i>Liberar Cargo</a></li>';
+				$reg .='</ul></li>';	
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><span><i class="fa fa-cart-plus"></i>Naves</span></a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="cierre_carro.php">Cerrar Naves</a></li>';
+				$reg .='<li><a href="reimprimir_mar.php">Reimprimir Naves</a></li>';
+				$reg .='<li><a href="reimprimir_banco.php">Reimprimir Banco</a></li>';
+				$reg .='<li><a href="conciliar_bancos.php">Conciliar Bancos</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Medicamentos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_medicamentos_us.php">Agregar Medicamentos</a></li>';
+				$reg .='<li><a href="editar_medicamentos_us.php">Editar Medicamentos</a></li>';
+				$reg .='<li><a href="imprimir_med.php" target="_blank">Listado de Medicamentos</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Inventario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst">';
+				$reg .='<a href="inventario_x_bodega.php">Inventario por Bodega</a></li>';
+				$reg .='<li><a href="editar_inventario_bodega.php">Editar Inventario por Bodega</a></li>';
+				$reg .='<li><a href="compras_detalle.php">Ingreso de Mercancía</a></li>';		
+				$reg .='<li><a href="traslado_detalle.php">Traslado entre Bodegas</a></li>';
+				
+				
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Contabilidad</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li><a href="nota_debito.php">Notas de Debito</a></li>';
+				$reg .='<li><a href="nota_factura.php">Notas de Crédito Manual por Factura</a></li>'; 
+				$reg .='<li class="subfirst"><a href="reimprimir_fiscal.php">Reimprimir Factura Fiscal</a></li>';
+				
+				
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Reportes</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="ventas_narcoticos.php">Narcoticos</a></li>';
+				
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';		
+				$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
+				$reg .='</ul>';
+				}  else  if ($_SESSION['MM_tipo'] == 10) {  
+				$reg .='<ul class="nav side-menu">';
+				if($estado != 'S'){ 
+					$reg .='<li><a href="cierre_carro_hospital.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+					} else {	
+					$reg .='<li><a href="cierre_carro_hospital_cierre.php"><span><i class="fa fa-check"></i>Generación de Facturas</span></a></li>';
+				} 
+				if($estado != 'S'){ 
+					$reg .='<li><a href="ver_devoluciones.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+					} else {	
+					$reg .='<li><a href="ver_devoluciones_cierre.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>';
+				} 
+				$reg .='<li><a href="falta_FA.php"><span><i class="fa fa-check"></i>Reenvio a Hospital</span></a></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Compras</a>';
+				$reg .='<ul class="nav child_menu">';
+				
+				$reg .='<li><a href="caja_menuda.php">Recibos de Caja</a></li>';
+				$reg .='<li><a href="reporte_caja.php">Reporte de Caja</a></li>';
+				$reg .='<li><a href="cierre_caja.php">Cierre de Caja</a></li>';
+				$reg .='</ul>';
+				$reg .='</li>';	
+				
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Contabilidad</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="estado_cargosatc_id.php">Movimientos por Fecha</a></li>';
+				$reg .='<li><a href="devoluciones_diarias_con.php">Devoluciones Diarias (N/C)</a></li>';
+				$reg .='<li><a href="ventas_impuesto.php">Impuesto por Ventas</a></li>';
+				$reg .='<li><a href="compras_impuesto.php">Impuesto por Compras</a></li>';
+				$reg .='<li><a href="reporte_z.php">Corte Z y X</a></li>';
+				$reg .='<li><a href="ordenes_mercancia.php">Ordenes de Mercancia Procesadas</a></li>';
+				$reg .='<li><a href="nota_debito.php">Notas de Debito</a></li>';
+				$reg .='<li><a href="nota_factura.php">Notas de Crédito Manual por Factura</a></li>';
+				$reg .='<li><a href="reimprimir_fiscal.php">Reimprimir Factura Fiscal</a></li>';
+				$reg .='<li><a href="ventas_xero.php">Ventas a Xero</a></li>';
+				$reg .='<li><a href="compras_xero.php">Compras a Xero</a></li>';
+				$reg .='</ul>';
+				$reg .='<li><a href="estado_cargosatc_f.php"><span><i class="fa fa-cart-plus"></i>Estado de Cargos</span></a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_fa.php"><i class="fa fa-check"></i>Búsqueda por FU</a></li>';
+				$reg .='<li><a href="estado_cargosatc_f_inac.php"><span><i class="fa fa-cart-plus"></i>Consulta Historias Inactivas</span></a></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Parametros</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="impresoras_fiscales.php">Impresoras Fiscales</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';
+				$reg .='</li>';
+				$reg .='<li><a href="consulta_producto.php"><i class="fa fa-check"></i>Consulta Inventario</a></li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>P&uacute;blico</a>';
+				$reg .='<ul class="nav child_menu">';
+				
+				$reg .='<li class="subfirst">';
+				$reg .='<li><a href="pago_creditos.php" >Pagos a Cr&eacute;dito</a></li>';
+				
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';
+				
+				$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
+				
+				$reg .='</ul>';
+				} else if ($_SESSION['MM_tipo'] == 11) { 
+				
+				
+				$reg .='<ul class="nav side-menu">';
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Insumos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_insumos.php">Agregar Insumos</a></li>';
+				$reg .='<li><a href="editar_insumo_us.php">Editar Insumos</a></li>';
+				$reg .='<li><a href="traslado_insumos.php">Traslado a Cuarto Esteril</a></li>';	
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Parametros</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="impresoras_fiscales.php">Impresoras Fiscales</a></li>';
+				$reg .='<li><a href="principios_activos.php">Principios Activos</a></li>';
+				
+				$reg .='</ul>';
+				$reg .='</li>';
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Recetario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="facturacion_label.php"><i class="fa fa-check"></i>Impresión de Labels</a></li>';
+				$reg .='</ul></li>';	
+				$reg .='<li><a href="consulta_producto.php"><i class="fa fa-check"></i>Consulta Inventario</a></li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-check"></i>Medicamentos</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="agregar_medicamentos_us.php">Agregar Medicamentos</a></li>';
+				$reg .='<li><a href="editar_medicamentos_us.php">Editar Medicamentos</a></li>';
+				$reg .='<li><a href="imprimir_med.php" target="_blank">Listado de Medicamentos</a></li>';
+				$reg .='</ul></li>';
+				
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Compras</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst"><a href="procesar_orden_compra.php">Procesar Pedidos</a></li>';
+				$reg .='<li><a href="reimprimir_compra.php">Reimprimir Orden de Compra</a></li>';
+				$reg .='<li><a href="reimprimir_compra_r.php">Reimprimir Compra (Ingreso de Mercancía)</a></li>';
+				$reg .='<li><a href="imprimir_med_pend_compra.php">Listado de Medicamentos Pendiente en O/C</a></li>';
+				$reg .='<li><a href="devolucion_vencimiento.php">Devolucion a Proveedores</a></li>';
+				$reg .='</ul>';
+				$reg .='</li>';	
+				
+				$reg .='<li><a href="#"><i class="fa fa-cart-plus"></i>Inventario</a>';
+				$reg .='<ul class="nav child_menu">';
+				$reg .='<li class="subfirst">';
+				$reg .='<a href="compras_detalle.php">Ingreso de Mercancía</a></li>';	
+				$reg .='<li><a href="traslado_ins_med.php">Traslado de Insumos a Medicamentos</a></li>';
+				$reg .='<li><a href="traslado_med_ins.php">Traslado de Medicamentos a Insumos</a></li>';	
+				$reg .='</ul></li>';
+				
+				
+				
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';		
+				$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
+				$reg .='</ul>';
+				}  else if ($_SESSION['MM_tipo'] == 13) { 
+				$reg .='<ul class="nav side-menu">';
+				$reg .='<li><a href="facturacion.php"><img src="default.htm_files/css3menu1/home.png" alt=""/>Venta al Publico</a></li>';
+				$reg .='<li><a href="devolucion_pub.php"><i class="fa fa-check"></i>N/C al Publico</a></li>';
+				$reg .='<li><a href="cotizacion.php"><i class="fa fa-check"></i>Cotizaci&oacute;n</a></li>';
+				$reg .='<li><a href="facturacion_credito.php"><i class="fa fa-check"></i>Pago de Cr&eacute;ditos</a></li>';
+				$reg .='<li><a href="consulta_producto.php"><i class="fa fa-check"></i>Consulta Inventario</a></li>';
+				/*	reg .='<li><a href="perfil_farmaceutico.php"><span><i class="fa fa-cart-plus"></i>Perfil Farmaceutico</span></a></li>';
+				reg .='<li><a href="ver_devoluciones.php"><span><i class="fa fa-cart-plus"></i>Facturas STAT / Devoluciones</span></a></li>'; */
+				$reg .='<li><a href="reporte_z_caja.php"><i class="fa fa-check"></i>Reporte de Caja</a></li>';
+				
+				
+				
+				$reg .='<li>	<a href="falta_fiscal.php"><i class="fa fa-check"></i>Obtener Fiscal</a></li>';
+				$reg .='<li><a href="factura_diaria.php"><i class="fa fa-check"></i>Facturas Diarias</a></li>';
+				$reg .='<li><a href="datos_generales.php"><span><i class="fa fa-check"></i>Datos Usuario</span></a></li>';	
+				$reg .='<li class="toplast"><a href="logout_caja.php"><i class="fa fa-check"></i>Salir</a>';
+				
+				$reg .='</ul>';
+			}
 			
-			$reg .='<li><a href="historia.php?userid='.$UserId.'&session='.$IdSession.'&username='.urlencode($userName).'"><i class="fa fa-home"></i>Principal</a></li>';
-			$reg .='<li><a href="historia.php?userid='.$UserId.'&session='.$IdSession.'&username='.urlencode($userName).'"><span><i class="fa fa-cart-plus"></i>Ordenes</span></a></li>';
-			$reg .='<li><a href="devolucion.php?userid='.$UserId.'&session='.$IdSession.'"><i class="fa fa-archive"></i>Devoluciones</a></li>';
-			$reg .='<li><a href="http://192.168.3.2/CMP_CONTRAINDICACIONES/_contraindicaciones.aspx?UserId='.$UserId.'&IdSession='.$IdSession.'&userName='.$userName.'"><i class="fa fa-check"></i>Contraindicaciones</a></li>';
-			$reg .='<li><a href="estado_cargos.php?userid='.$UserId.'&session='.$IdSession.'"><i class="fa fa-check"></i>Estado de Ordenes</a></li>';
-			$reg .='<li><a href="interrumpir_medicamento.php?userid='.$UserId.'&session='.$IdSession.'"><i class="fa fa-check"></i>Interrumpir Medicamentos</a></li>';
-			$reg .='<li><a href="salida_paciente.php?userid='.$UserId.'&session='.$IdSession.'"><i class="fa fa-check"></i>Salida de Paciente</a></li>';
-			$reg .='<li><a href="perfil_farmaceutico_h.php?userid='.$UserId.'&session='.$IdSession.'"><i class="fa fa-archive"></i>Perfil Farmaceutico</a></li>';
-			$reg .='<li><a href="sugerencias.php?userid='.$UserId.'&session='.$IdSession.'"><i class="fa fa-archive"></i>Sugerencias</a></li>';
-			$reg .='<li><a href="imprimir_inv_hosp.php"><i class="fa fa-cart-plus"></i>Listado de Medicamentos</a></li>';
-			
-			$reg .='<li class="toplast"><a href="logout.php"><i class="fa fa-check"></i>Salir</a>';
-			
-			$reg .='</ul>';
-			
+			$reg .='</div>';			
 			$reg .='</div>';
-			
-			$reg .='</div>';													
 			
 			echo $reg;
 		}
@@ -406,4 +1308,4 @@
 		
 	}
 	
-?>		
+?>

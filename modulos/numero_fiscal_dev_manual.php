@@ -2,7 +2,7 @@
 	require_once('../clases/conexion.php');
 	
 	class nmanual{
-	
+		
 		public static function select1($devolucion) {
 			$reg = conexion::sqlGet("select b.caja_id, a.ruta_salida from cajas a, devolucion b where a.caja_id = b.caja_id and b.devolucion = '".$devolucion."'");
 			return $reg;

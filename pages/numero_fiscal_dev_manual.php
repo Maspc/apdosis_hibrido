@@ -1,8 +1,8 @@
 <?php
+	
 	ob_start();
 	include ('./clases/session.php');
-	require_once('../modulos/numero_fiscal_dev_manual.php');	
-	
+	require_once('../modulos/numero_fiscal_dev_manual.php');
 	
 	//$archivo = $_GET['archivo'];
 	//$carpeta = $_GET['carpeta'];
@@ -10,10 +10,15 @@
 	//$h = '';
 	$devolucion = $_GET['devolucion'];
 	
-	$korow = nmanual::select1($devolucion);
-	foreach($korow as $kw){
-		$caja_id = $kw->caja_id;
-		$carpeta = addslashes($kw->ruta_salida);	
+	
+	
+	$kores = nmanual::selecet1($devolucion);
+	foreach($kores as $korow )
+	
+	{
+		$caja_id = $korow->caja_id;
+		$carpeta = addslashes($korow->ruta_salida);
+		
 	}
 	
 	$archivo =  "nctic".str_pad($devolucion, 7, 0, STR_PAD_LEFT).".txt";
@@ -48,6 +53,11 @@
 		//echo "<li>".$g; //impresora
 		//echo "<li>".$h; //numero fiscal
 		
+		
+		
+		
+		
+		
 	}
 	
 	
@@ -68,18 +78,28 @@
 		
 		if ($g == '') {
 			
-			$berow = nmanual::select2($caja_id);
-			foreach($berow as $bw){
-				$g = $bw->nombre_impresora;
-			}
+			$beres =  nmanual::selecet2($caja_id);
+			foreach($beres as $berow )
 			
-		}	
+			{
+				$g = $berow->nombre_impresora;	   
+			}	     
+			
+		}
+		
+		
 		
 		nmanual::update1($h,$g,$archivo,$devolucion);
 		
-	    $wrow = nmanual::select3($devolucion);
-		foreach($wrow as $ww){
-			$FA = $ww->FA;
+		
+		
+		
+		
+		$wres =  nmanual::selecet3($devolucion);	
+		foreach($wres as $wrow  )
+		
+		{
+			$FA = $wres->FA;
 		}
 		
 		echo "<b>Se obtuvo correctamente el n&uacute;mero fiscal</b>";

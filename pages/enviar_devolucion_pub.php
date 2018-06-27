@@ -1,7 +1,7 @@
 <?php 
 	ob_start();
 	include ('./clases/session.php');
-	require_once('../modulos/devolucion_pub.php');	
+	require_once('../modulos/enviar_devolucion_pub.php');
 	require_once('../modulos/layout.php');
 	layout::encabezado();
 	layout::menu();
@@ -60,8 +60,12 @@
 	$cantidad_prep = $_POST['cantprep'];}
 	if (isset($_POST['cantidad_por_dosis'])) { 
 	$cantidad_por_dosis = $_POST['cantidad_por_dosis'];}
+	if (isset($_POST['pago'])) { 
+	$pago = $_POST['pago'];}
+	
 	
 	//include('seguridad.php');
+	
 	
 	$w = 0;			
 	for($k = 0; $k < sizeof($medicamento); $k++) {
@@ -72,10 +76,14 @@
 			$w = $w + 1;
 		}
 		
-		$rowsvti = dvolucpub::select7($medicamento_id[$k],$cargo);
-		foreach($rowsvti as $rwti){
-			$dev = $rwti->devolucion;
-			$canti = $rwti->cantidad;
+		
+		
+		$resvti=enviar_dp::select1($cargo,$medicamento_id[sk]);
+		
+		foreach($resvti as $resvti)
+		{
+			$dev = $rowsvti->devolucion;
+			$canti = $rowsvti->cantidad;
 			$dif = $canti -$dev ; 
 		}
 		
@@ -83,20 +91,29 @@
 	
 	if ($w > 0 && $dif > 0) {
 		
-		$korow = dvolucpub::select8($_SESSION['MM_iduser']);
-		foreach($korow as $kw){
-			$caja_id = $kw->caja_id;
-			$nombre = $kw->nombre;
+		
+		$kores =enviar_dp::select2($_SESSION['MM_iduser']);
+		
+		foreach($kores as $korow)
+		{
+			$caja_id = $korow->caja_id;
+			$nombre = $korow->nombre;
 			
-		}
+		}			
 		
 		$fecha_creacion = date("Y-m-d H:i:s", time());
 		
-		dvolucpub::insert1($fecha_creacion,$stat,$userid,$bodega,$motivo,$caja_id,$cargo);
 		
-		$rowd = dvolucpub::select9();
-		foreach($rowd as $rwd){
-			$z = $rwd->dev;
+		
+		$res5 =enviar_dp::insert1($fecha_creacion,$userid,$bodega,$motivo,$caja_id,$cargo);
+		
+		
+		
+		
+		$resd = enviar_dp::select3();
+		foreach($resd as $rowd)
+		{
+			$z = $rowd->dev;
 		}
 		
 		//echo "devolucion ".$z;
@@ -127,17 +144,24 @@
 					$cantidad_uni = $cantidad_de_dosis[$c];
 				}
 				
+				$vres =enviar_dp::select4($medicamento_id[$c]);
 				
-				$vrow = dvolucpub::select10($medicamento_id[$c]);
-				foreach($vrow as $vrw){
-					$costo_unitario = $vrw->costo_unitario;
-				}				
+				foreach($vres as  $vrow)
+				{
+					$costo_unitario = $vrow->costo_unitario;
+				}
+				
 				
 				$precio_venta_dev = $cantidad_uni * ($precio_unitario[$c]  + $impuesto[$c]) ;
 				
 				$l = $l + 1;
 				
-				dvolucpub::insert2($medicamento[$c],$forma[$c],$dosis[$c],$horas[$c],$dias[$c],$cantidad_uni,$z,$l,$medicamento_id[$c],$cargo,$precio_unitario[$c],$precio_venta_dev,$historia[$c],$costo_insumo[$c],$impuesto[$c],$costo_unitario);
+				$res = enviar_dp::insert2($medicamento[$c], $forma[$c],$dosis[$c],$horas[$c], $dias[$c],$cantidad_uni,$z, $l, $medicamento_id[$c], $cargo, $precio_unitario[$c], $precio_venta_dev, $historia[$c], $costo_insumo[$c], $impuesto[$c], $costo_unitario);
+				
+				
+				
+				
+				
 				
 				/*
 					$s = "update registro_detalle set cantidad_de_dosis = cantidad_de_dosis - $devol[$c] where historia = '" .$historia[$c] . "' and tratamiento = '".$tratamiento[$c]."' and cargo = '".$despacho[$c]."' and medicamento_id = '$medicamento_id[$c]'";
@@ -146,7 +170,9 @@
 				
 				//echo "<br>1. la cantidad de dosis menos 1 es: ".($cantidad_de_dosis[$c] - $devol[$c]);
 				
-				dvolucpub::update1($devol[$c],$medicamento_id[$c],$cargo);
+				$resvt= enviar_dp:: update1($devol[$c],$medicamento_id[$c],$cargo);
+				
+				
 				/*
 					if (($cantidad_de_dosis[$c] - $devol[$c]) == 0) { 
 					echo "<br>2. el medicamento es: ".$medicamento_id[$c];
@@ -154,10 +180,13 @@
 					$o = "update registro_detalle set estado = 'F' where medicamento_id = '$medicamento_id[$c]'";
 					$ores = mysql_query($o, $conn) or die(mysql_error());
 				}*/
-							
-				$result = dvolucpub::select11($historia[$c],$tratamiento[$c],$despacho[$c]);
 				
-				dvolucpub::update2($devol[$c],$medicamento_id[$c]);
+				
+				$result = enviar_dp::select5($historia[$c],$tratamiento[$c],$despacho[$c]);
+				
+				
+				$resvg=enviar_dp::update2($devol[$c],$medicamento_id[$c]);
+				
 				/*
 					$r = "select sum(cantidad_de_dosis) as valido from registro_detalle where historia = '" .$historia[$c] . "' and tratamiento = '".$tratamiento[$c]."' and cargo = '".$despacho[$c]."'";
 					$rres = mysql_query($r, $conn) or die(mysql_error());
@@ -176,9 +205,47 @@
 				$hist = $historia[$c];
 			}}
 			
-			dvolucpub::update3($precio_venta1,$z);
+			//echo "<p>pago ".$pago;
 			
-			dvolucpub::update4($precio_venta1,$z);
+			if($pago == 1) {
+				$efectivo = $precio_venta1;
+				$clave = 0;
+				$tdc = 0;
+				$credito = 0;
+				$cheque = 0;
+				} else if($pago == 2) {
+				$clave = $precio_venta1;
+				$efectivo = 0;
+				$tdc = 0;
+				$credito = 0;
+				$cheque = 0;
+				} else if($pago == 3) {
+				$tdc = $precio_venta1;
+				$efectivo = 0;
+				$clave = 0;
+				$credito = 0;
+				$cheque = 0;
+				} else if($pago == 4) {
+				$cheque = $precio_venta1;
+				$efectivo = 0;
+				$clave = 0;
+				$tdc = 0;
+				$credito = 0;
+				} else if($pago == 5) {
+				$credito = $precio_venta1;
+				$efectivo = 0;
+				$clave = 0;
+				$tdc = 0;
+				$cheque = 0;
+			}
+			
+			
+			$ru =enviar_dp::update3($precio_venta1, $efectivo, $clave,$tdc,$cheque,$credito,$z);
+			
+			
+			
+			$insi =enviar_dp::update4($precio_venta1,$z);
+			
 			
 			//echo "2";
 			
@@ -216,7 +283,8 @@
 			
 			//echo "3";
 			
-			$rows = dvolucpub::select12($z);
+			$resulta =enviar_dp::select6($z);
+			
 			
 			echo "<table border='1'>
 			<tr>
@@ -225,12 +293,13 @@
 			<th>Cantidad</th>
 			
 			</tr>";
+			foreach($resulta as $rows)
 			
-			foreach($rows as $rws)
 			{
+				
 				echo "<tr>";
-				echo "<td>" . $rws->medicamento. "</td>";
-				echo "<td>" . $rws->cantidad. "</td>";
+				echo "<td>" . $rows->medicamento . "</td>";
+				echo "<td>" . $rows->cantidad. "</td>";
 				
 				
 				echo "</tr>";
@@ -243,40 +312,63 @@
 			$dev_long = "NCTIC".str_pad(trim($devolucion), 7, 0, STR_PAD_LEFT);
 			$dev_long_min = "nctic".str_pad(trim($devolucion), 7, 0, STR_PAD_LEFT);
 			
-			$wrow = dvolucpub::select13($devolucion);
-			foreach($wrow as $wrw){				
-				$factura = $wrw->factura;
+			$wres =enviar_dp::select7($devolucion);
+			foreach($wres as $wrow)
+			{
+				
+				$factura = $wrow->factura;
 			}
+			
+			$gres =enviar_dp::select8($devolucion);
+			
+			foreach($gres as $grow) 
+			{
+				$total = $grow->total;
+			}
+			
+			
+			$res =enviar_dp::select9 ($factura);
+			
+			
+			
+			$result =enviar_dp::select10($factura);
+			foreach($res as $row )
+			{
+				
+				$factura = $row->factura;
+				
+				$nom_cliente = $row->nombre;
+				
+				foreach($result as $rowl)
+				{
+					$nombre = $rowl->nombre;
+					$id_paciente = $rowl->identificacion;
 					
-			$grow = dvolucpub::select14($devolucion);
-			foreach($grow as $grw){
-				$total = $grw->total;
-			}
-			
-			$row = dvolucpub::select16($factura);
-			
-			$rowl = dvolucpub::select17($factura);			
-			
-			foreach($row as $rw){
-				
-				$factura = $rw->factura;
-				$fecha = $rw->fecha;
-				$nom_cliente = $rw->nombre;
-				
-				foreach($rowl as $rwl){
-					$nombre = $rwl->nombre;
-					$id_paciente = $rwl->identificacion;
+					$factura_fiscal = $rowl->factura_fiscal;
+					
+					$equipo_fiscal = $rowl->equipo_fiscal;
 				}
 				
-			
-				$rowd = dvolucpub::select18($devolucion);
+				$resd =enviar_dp::select11($devolucion);
 				
-				foreach($rowd as $rwd){
-					$factura_fiscal = $rwd->factura_fiscal;
-					$archivo_fiscal = rwd->archivo_fiscal;
-					$equipo_fiscal = rwd->equipo_fiscal;
-					$FA = rwd->FA;
-					$factura = rwd->factura;
+				
+				$efectivo = 0;
+				$tarjeta_debito = 0;
+				$tarjeta_credito = 0;
+				$credito = 0;
+				$cheque = 0;
+				
+				foreach($resd as $rowd )
+				{
+					
+					$FA = $rowd->FA;
+					$factura = $rowd->factura;
+					$efectivo = $rowd->efectivo;
+					$tarjeta_debito = $rowd->tarjeta_clave;
+					$tarjeta_credito = $rowd->tarjeta_credito;
+					$credito = $rowd->credito;
+					$cheque = $rowd->cheque;
+					//$fecha = $rowd->fecha_creacion;
 					//$factura_fiscal = '000000007';
 					//$archivo_fiscal = 'FACTI0000077';
 					//$equipo_fiscal = 'CLOK311101129';
@@ -293,59 +385,87 @@
 				}
 				
 				/*añado parametrización de impresoras fiscales*/
-								
 				
-				$korow = dvolucpub::select19($_SESSION['MM_iduser']);
-				foreach($korow as $kw){
-					$caja_id = $kw->caja_id;
+				
+				$kores = enviar_dp::select12($_SESSION['MM_iduser']);
+				
+				foreach($kores as $korow )
+				{
+					$caja_id = $korow->caja_id;
 					
 				}
 				
 				/*añado parametrización de impresoras fiscales*/
-			
-				$rowspe = dvolucpub::select20($caja_id);
-				foreach($rowspe as $rwp){
-					$nombre_carpeta = $rwp->ruta_entrada;
-					$nombre_carpeta2 = $rwp->ruta_salida;
+				
+				$respe =enviar_dp::select13($caja_id);
+				
+				
+				foreach($respe as $rowspe)				
+				{
+					$nombre_carpeta = $rowspe->ruta_entrada;
+					$nombre_carpeta2 = $rowspe->ruta_salida;
 				}
 				
 				/* fin de añado parametrización de impresoras fiscales */
 				
 				
+				if($efectivo == '0.00'){
+					$efectivo = 0;
+				}
+				
+				if($cheque == '0.00'){
+					$cheque = 0;
+				}
+				
+				if($tarjeta_credito == '0.00'){
+					$tarjeta_credito = 0;
+				}
+				
+				if($tarjeta_debito == '0.00'){
+					$tarjeta_debito = 0;
+				}
+				
+				
+				if($credito == '0.00'){
+					$credito = 0;
+				}
+				
 				
 				//$fp = fopen("/home/apdosis/pos/".$nombre_carpeta."/".$dev_long.".txt","a");
 				$fp = fopen($nombre_carpeta."//".$dev_long.".txt","a");
-				fwrite($fp, "1\t$dev_long\t$empresa\t$ruc\t$direccion\t$total\t0\tDEVOLUCION\t$fecha\t$equipo_fiscal\t$factura_fiscal\t$factura");
+				fwrite($fp, "1\t$dev_long\t$empresa\t$ruc\t$direccion\t$total\t0\t$fecha\t$equipo_fiscal\t$factura_fiscal\t$credito\t$efectivo\t$cheque\t$tarjeta_credito\t$tarjeta_debito");
 				fclose($fp);
 				
 				$dev_long_mov = "NCMVC".str_pad($devolucion, 7, 0, STR_PAD_LEFT);
 			}
 			
+			$res1 =enviar_dp::select14($devolucion);
 			
 			//$fp2 = fopen("/home/apdosis/pos/".$nombre_carpeta."/".$dev_long_mov.".txt","a");
 			$fp2 = fopen($nombre_carpeta."//".$dev_long_mov.".txt","a");
 			
-			$row1 = dvolucpub::select21($devolucion);
-			foreach($row1 as $rw1){
+			foreach($res1 as $row1)
+			{
 				
-				if ($rw1->tipo_de_dosis == 'M'){
-					$cantidad_uni = ceil($rw1->cantidad);
+				if ($row1->tipo_de_dosis == 'M'){
+					$cantidad_uni = ceil($row1->cantidad);
 					}else{
-					$cantidad_uni = $rw1->cantidad;
+					$cantidad_uni = $row1->cantidad;
 				}
 				
-				$id = $rw1->medicamento_id;
-				$med = $rw1->medicamento;
-				$dosis = $rw1->dosis;
+				$id = $row1->medicamento_id;
+				$med = $row1->medicamento;
+				$dosis = $row1->dosis;
 				$cant = $cantidad_uni;
-				$precio = $rw1->precio_unitario;
-				$impuesto = $rw1->impuesto;
+				$precio = $row1->precio_unitario;
+				$impuesto = $row1->impuesto;
 				
 				/**agrego tipo de impuesto**/
-					
-				$crow = dvolucpub::select22($id);
-				foreach($crow as $crw){
-					$tipo_impuesto = $crw->tipo_impuesto;
+				$cres =enviar_dp::select15($id);
+				
+				foreach($cres as $crow )
+				{
+					$tipo_impuesto = $crow->tipo_impuesto;
 				}
 				
 				
@@ -360,10 +480,10 @@
 			
 			
 			echo "<INPUT TYPE=\"button\" class='blue' value='Obtener N&uacute;mero Fiscal' id='imprimirp' onClick=\"parent.location='numero_fiscal_dev_cierre.php?archivo=".$dev_long_min.".txt&devolucion=".$devolucion."&carpeta=".addslashes($nombre_carpeta2)."'\" >";
-			} else{ 
 			
+			} else{ 
 			echo "<script language='javascript'>window.location='devolucion_proceso.php?cargo=$factura&men=1&userid=$userid&session=$session'</script>";   
-	}
+	}  
 	
 	layout::fin_content();
 ?>

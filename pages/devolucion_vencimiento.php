@@ -1,30 +1,62 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <?php
 	ob_start();
 	include ('./clases/session.php');
-	require_once('../modulos/devolucion_vencimiento.php');
+	//require_once('../modulos/devolucion_vencimiento.php');
+	require_once('../modulos/layout.php');
+	layout::encabezado();	
+	
 	if (isset($_GET['men'])){
 		$men = $_GET['men'];
 		} else {
-	$men = 0; }
-	require_once('../modulos/layout.php');
-	layout::encabezado();
-
+	$men = 0; 
+	}
+	
+?>
+<style type="text/css">
+	
+	.red {
+	background-color: red;
+	color: white;
+	}
+	.white {
+	background-color: white;
+	color: black;
+	}
+	.green {
+	background-color: green;
+	color: white;
+	}
+	
+	.blue {
+	background-color: blue;
+	color: white;
+	}
+	.red, .white, .blue, .green {
+	margin: 0.5em;
+	padding: 5px;
+	font-weight: bold;
+	
+	}
+	
+</style>
+<?php
 	layout::menu();
 	layout::ini_content();
 ?>
-
 <div>
 	
 	<h2>Devolucion a Proveedores</h2>
 	
 	
 	<div class="content_box_inner">
-		<?php if ($men == 1) { echo "NO puede enviar una devoluciÃ³n en blanco!!"; }  ?>
+		<?php if ($men == 1) { echo "NO puede enviar una devolución en blanco!!"; }  ?>
 		
 		<form action="enviar_devolucion_ven.php" method="post" target="" name="formulario" id="formulario" onSubmit="return validate();">
 			
-			<table class="dtable" width="500" border="0" cellspacing="0" >
+			<table width="500" border="0" cellspacing="0" >
+				
+				
+				
 				
 				<!-- <tr>
 					
@@ -57,10 +89,10 @@
 			
 			
 			
-			<table class="formulario dtable"><br />
+			<table class="formulario"><br />
 				<thead>
 					<tr>
-						<th colspan="2"><img src="../add.png" />Agregar DevoluciÃ³n</th>
+						<th colspan="2"><img src="add.png" />Agregar Devolución</th>
 					</tr>
 					<tr>
 						<td colspan="2">
@@ -68,6 +100,12 @@
 						</tr>
 					</thead> 
 					<tbody>
+						
+						<tr>
+							<td>C&oacute;digo de Barra</td>
+							<td><input name="codigo_de_barra" type="text" id="codigo_de_barra" size="25"  /> &nbsp; <b>*</b>
+							</td>
+						</tr>
 						<tr>
 							<td>Medicamento/Producto</td>
 							<td><input name="medicamento" type="text" id="medicamento" size="75"/><input name="medicamento_id" type="hidden" id="medicamento_id" size="75"/>&nbsp; <b>*</b>
@@ -85,7 +123,7 @@
 						</tr>
 						<tr>
 							<td>Fecha de vencimiento</td>
-							<td><input sformat name="calendar" type="text" id="calendar" size="25" /><button bsmall id="f_btn1" type="button" >...</button><br />
+							<td><input name="calendar" type="text" id="calendar" size="25" /><button bsmall id="f_btn1" type="button" >...</button><br />
 								<script type="text/javascript">//<![CDATA[
 									var cal1 = Calendar.setup({
 										inputField : "calendar",
@@ -118,7 +156,7 @@
 					
 				</table>
 				
-				<table class="dtable" id="grilla" class="lista">
+				<table id="grilla" class="lista">
 					<thead>
 						<tr>
 							<th>Medicamento/Producto</th>
@@ -145,7 +183,7 @@
 						
 						<input type="submit" name="enviar" id="enviar" value="Enviar Orden" class="green" onClick="this.disabled=true; this.value='Enviando...'; " />
 						
-						<center><p><b><h2>Total de la Devoluci&oacute;n: &nbsp; </h2><input ctotal type="text" name="total_c" id="total_c" value="0" disabled="disabled" style="font-size: 18px;text-align: center;font-color: blue;"><h2>Total Impuesto: &nbsp; </h2><input ctotal type="text" name="impuesto_c" id="impuesto_c" value="0" disabled="disabled" style="font-size: 18px;text-align: center;font-color: blue;"></b></p></center> 
+						<center><p><b><h2>Total de la Devoluci&oacute;n: &nbsp; </h2><input type="text" name="total_c" id="total_c" value="0" disabled="disabled" style="font-size: 18px;text-align: center;font-color: blue;"><h2>Total Impuesto: &nbsp; </h2><input type="text" name="impuesto_c" id="impuesto_c" value="0" disabled="disabled" style="font-size: 18px;text-align: center;font-color: blue;"></b></p></center> 
 						
 						<!--  <input type="button" name="enviar" value="Enviar" id="enviar" onclick="javascript:popUprev('enviar.php')" /> !-->
 						
@@ -161,200 +199,236 @@
 		</div>
 		
 	</div>
-	
-</div>
-<div></div>    
-<?=layout::fin_content()?>
-<SCRIPT TYPE="text/javascript">
-	<!--
-	// copyright 1999 Idocs, Inc. http://www.idocs.com
-	// Distribute this script freely but keep this notice in place
-	function numbersonly(myfield, e, dec)
-	{
-		var key;
-		var keychar;
-		
-		if (window.event)
-		key = window.event.keyCode;
-		else if (e)
-		key = e.which;
-		else
-		return true;
-		keychar = String.fromCharCode(key);
-		
-		// control keys
-		if ((key==null) || (key==0) || (key==8) || 
-		(key==9) || (key==13) || (key==27) )
-		return true;
-		
-		// numbers
-		else if ((("0123456789").indexOf(keychar) > -1))
-		return true;
-		
-		// decimal point jump
-		else if (dec && (keychar == "."))
+	<?=layout::fin_content()?>
+	<SCRIPT TYPE="text/javascript">
+		<!--
+		// copyright 1999 Idocs, Inc. http://www.idocs.com
+		// Distribute this script freely but keep this notice in place
+		function numbersonly(myfield, e, dec)
 		{
-			myfield.form.elements[dec].focus();
+			var key;
+			var keychar;
+			
+			if (window.event)
+			key = window.event.keyCode;
+			else if (e)
+			key = e.which;
+			else
+			return true;
+			keychar = String.fromCharCode(key);
+			
+			// control keys
+			if ((key==null) || (key==0) || (key==8) || 
+			(key==9) || (key==13) || (key==27) )
+			return true;
+			
+			// numbers
+			else if ((("0123456789").indexOf(keychar) > -1))
+			return true;
+			
+			// decimal point jump
+			else if (dec && (keychar == "."))
+			{
+				myfield.form.elements[dec].focus();
+				return false;
+			}
+			else
 			return false;
 		}
-		else
-		return false;
-	}
+		
+		//-->
+	</SCRIPT>
 	
-	//-->
-</SCRIPT>
-
-
-<script type="text/javascript">
-	$(document).ready(function() {
+	<script type="text/javascript">
 		
-		//$("#formulario").validate();
-		
-		function log(event, data, formatted) {
-			$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
+		function stopRKey(evt) {
+			var evt = (evt) ? evt : ((event) ? event : null);
+			var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+			if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
 		}
 		
-		function formatItem(row) {
-			return row[0] + " (<strong>id: " + row[1] + "</strong>)";
-		}
-		function formatResult(row) {
-			return row[0].replace(/(<.+?>)/gi, '');
-		}
+		document.onkeypress = stopRKey;
 		
-		
-		$("#medicamento").autocomplete("get_medicamento_ven.php", {
-			width: 500,
-			matchContains: true,
-			mustMatch: false,
-			selectFirst: false
-		});
-		
-		$("#medicamento").autocomplete({
-			serviceUrl : 'get_medicamento_ven.php',
-			paramName : 'q',
-			onSelect: function (data) {			
-			$("#medicamento_id").val(data.codigo_interno);
-			$("#forma_farma").val(data.forma_farma);
-			$("#dosis_tipo").val(data.tipo_posologia);
-			$("#tipo_de_dosis").val(data.tipo_de_dosis);
-			$("#descri_forma").val(data.forma_descri);
-			$("#posologia").val(data.posologia);
-			$("#codigo_barras").val(data.tipo_de_grupo);
-			$("#costo").val(data.costo_unitario);
-			$("#tipo_impuesto").val(data.tipo_impuesto);
+	</script>   
+	
+	<script type="text/javascript">
+		$().ready(function() {
+			
+			$("#formulario").validate();
+			
+			function log(event, data, formatted) {
+				$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
 			}
-		});
-		
-		$("#proveedor_desc").autocomplete({
-			serviceUrl : 'get_proveedor.php',
-			paramName : 'q',
-			onSelect: function (data) {
-			$("#proveedor").val(data.id_proveedor);
+			
+			function formatItem(row) {
+				return row[0] + " (<strong>id: " + row[1] + "</strong>)";
 			}
-		});
-		
-		/*
-			$("#identificacion").autocomplete("get_personas.php", {
-			width: 500,
-			matchContains: true,
-			mustMatch: true,
-			selectFirst: true
+			function formatResult(row) {
+				return row[0].replace(/(<.+?>)/gi, '');
+			}
+			
+			
+			$("#medicamento").autocomplete("get_medicamento_ven.php", {
+				width: 500,
+				matchContains: true,
+				mustMatch: false,
+				selectFirst: false
 			});
 			
-			$("#identificacion").result(function(event, data, formatted) {
-			$("#nombre_paciente").val(data[1]);
-			$("#alergias").val(data[2]);
-			$("#peso").val(data[3]);
-			$("#otros").val(data[4]);
-			$("#compania_de_seguro").val(data[5]);
-			$("#diabetes").val(data[6]);
-			$("#hipertension").val(data[7]);
-			$("#contraindicaciones").val(data[8]);
+			$("#medicamento").result(function(event, data, formatted) {
+				$("#medicamento_id").val(data[1]);
+				$("#forma_farma").val(data[2]);
+				$("#dosis_tipo").val(data[3]);
+				$("#tipo_de_dosis").val(data[4]);
+				$("#descri_forma").val(data[5]);
+				$("#posologia").val(data[6]);
+				$("#codigo_de_barra").val(data[7]);
+				$("#costo").val(data[8]);
+				$("#tipo_impuesto").val(data[9]);
 			});
-		*/
-		
-		
-		$("#clear").click(function() {
-			$(":input").unautocomplete();
+			
+			$("#codigo_de_barra").autocomplete("get_barras_com1.php", {
+				width: 500,
+				matchContains: true,
+				mustMatch: false,
+				selectFirst: true
+			});
+			
+			$("#codigo_de_barra").result(function(event, data, formatted) {
+				$("#medicamento_id").val(data[1]);
+				$("#forma_farma").val(data[2]);
+				$("#dosis_tipo").val(data[3]);
+				$("#tipo_de_dosis").val(data[4]);
+				$("#descri_forma").val(data[5]);
+				$("#posologia").val(data[6]);
+				$("#medicamento").val(data[7]);
+				$("#tipo_impuesto").val(data[8]);
+				$("costo").val(data[9]);
+			});
+			
+			$("#nommedico").autocomplete("get_medico.php", {
+				width: 500,
+				matchContains: true,
+				mustMatch: false,
+				selectFirst: false
+			});
+			
+			$("#nommedico").result(function(event, data, formatted) {
+				$("#medico").val(data[1]);
+			});
+			
+			$("#proveedor_desc").autocomplete("get_proveedor.php", {
+				width: 500,
+				matchContains: true,
+				mustMatch: true,
+				selectFirst: true
+			});
+			
+			$("#proveedor_desc").result(function(event, data, formatted) {
+				$("#proveedor").val(data[1]);
+			});
+			
+			/*
+				$("#identificacion").autocomplete("get_personas.php", {
+				width: 500,
+				matchContains: true,
+				mustMatch: true,
+				selectFirst: true
+				});
+				
+				$("#identificacion").result(function(event, data, formatted) {
+				$("#nombre_paciente").val(data[1]);
+				$("#alergias").val(data[2]);
+				$("#peso").val(data[3]);
+				$("#otros").val(data[4]);
+				$("#compania_de_seguro").val(data[5]);
+				$("#diabetes").val(data[6]);
+				$("#hipertension").val(data[7]);
+				$("#contraindicaciones").val(data[8]);
+				});
+			*/
+			
+			
+			$("#clear").click(function() {
+				$(":input").unautocomplete();
+			});
+			
+			
 		});
 		
 		
-	});
-	
-	
-	
-	
-</script>
-
-<script type="text/javascript">
-	<!--
-	function getData(){
-		myString+=document.formulario.identificacion.value
-		/*location.href = "ver_alergias.php" + '?' + myString*/
-		alert("Estoy llamando a la funcion")
-		URL = "ver_alergias.php" + '?' + myString
-		day = new Date();
-		id = day.getTime();
-		eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,width=400,height=400');");
-	}
-	//-->
-</script>
-
-
-
-
-
-<script type="text/javascript">
-	function limpiar_campos()
-	{
-		
-		document.getElementById('medicamento').value='';
-		document.getElementById('cantidad').value='';
-		document.getElementById('lote').value='';
-		document.getElementById('calendar').value='';
-		document.getElementById('costo').value='';
-		
-	}
-	
-	
-	
-</script>
-
-<script language="javascript">
-	<!-- Begin
-	function popUp(URL) {
-		day = new Date();
-		id = day.getTime();
-		eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,width=800,height=600');");
-	}
-	
-	
-	
-	
-	// End -->
-</script>
-
-<script>
-	function validate()
-	{
-		var factura = document.formulario.factura;
-		var proveedor = document.formulario.proveedor_desc;
 		
 		
-		if (factura.value == "")
+	</script>
+	
+	<script type="text/javascript">
+		<!--
+		function getData(){
+			myString+=document.formulario.identificacion.value
+			/*location.href = "ver_alergias.php" + '?' + myString*/
+			alert("Estoy llamando a la funcion")
+			URL = "ver_alergias.php" + '?' + myString
+			day = new Date();
+			id = day.getTime();
+			eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,width=400,height=400');");
+		}
+		//-->
+	</script>
+	
+	
+	
+	
+	
+	<script type="text/javascript">
+		function limpiar_campos()
 		{
-			window.alert("Por favor introduzca el no. de factura");
-			factura.focus();
-			return false;
+			
+			document.getElementById('medicamento').value='';
+			document.getElementById('cantidad').value='';
+			document.getElementById('lote').value='';
+			document.getElementById('calendar').value='';
+			document.getElementById('costo').value='';
+			
 		}
 		
-		if (proveedor.value == "")
-		{
-			window.alert("Por favor introduzca el proveedor");
-			proveedor.focus();
-			return false;
+		
+		
+	</script>
+	
+	<script language="javascript">
+		<!-- Begin
+		function popUp(URL) {
+			day = new Date();
+			id = day.getTime();
+			eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,width=800,height=600');");
 		}
 		
-	}
-</script>
-<script language="javascript" type="text/javascript" src="../js/script_com1.js?r=<?=rand()?>"></script>
+		
+		
+		
+		// End -->
+	</script>
+	
+	<script>
+		function validate()
+		{
+			var factura = document.formulario.factura;
+			var proveedor = document.formulario.proveedor_desc;
+			
+			
+			if (factura.value == "")
+			{
+				window.alert("Por favor introduzca el no. de factura");
+				factura.focus();
+				return false;
+			}
+			
+			if (proveedor.value == "")
+			{
+				window.alert("Por favor introduzca el proveedor");
+				proveedor.focus();
+				return false;
+			}
+			
+		}
+	</script>				

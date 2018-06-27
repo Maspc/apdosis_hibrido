@@ -1,7 +1,5 @@
 <?php
-	include('./clases/session.php');
-	require_once('../modulos/compras_impuesto.php');
-	require_once('./mysql_table.php');
+	require('mysql_table.php');
 	
 	$fecha1 = $_POST['fecha1'];
 	$fecha2 = $_POST['fecha2'];
@@ -21,10 +19,17 @@
 		}
 	}
 	
-	$rowd = cimpuesto::usuarios($_SESSION['MM_iduser']);
-	foreach($rowd as $rw){
-		$username = $rw->nombre;
-	}	
+	//Connect to database
+	ob_start();
+	include ('./clases/session.php');
+	require_once('../modulos/imprimir_impuesto_compra.php');
+	
+	$resd = imprimir::select1($_SESSION['MM_iduser']);
+	
+	foreach($resd as $rowd){
+		$username = $rowd->nombre;
+	}
+	
 	
 	$pdf=new PDF();
 	$pdf->AddPage('L');
@@ -32,7 +37,7 @@
 	$pdf->AddCol('id_compra',20,'Id Compra', 'C');
 	$pdf->AddCol('nombre',75,'Proveedor', 'C');
 	$pdf->AddCol('fecha_proceso',30,'Fecha Proceso','C');
-	$pdf->AddCol('medicamento',100,'Artículo','C');
+	$pdf->AddCol('medicamento',100,'Medicamento','C');
 	$pdf->AddCol('costo_total',30,'Costo Total','C');
 	$pdf->AddCol('impuesto_total',30,'Impuesto Total','C');
 	
@@ -46,7 +51,9 @@
 	
 	$pdf->Ln(10);
 	$pdf->AddCol('total',20,'Total', 'C');
-
+	
+	
+	
 	$prop3=array('HeaderColor'=>array(255,150,100),
 	'color1'=>array(210,245,255),
 	'color2'=>array(255,255,210),
@@ -68,7 +75,9 @@
 	$pdf->Ln(10);
 	$pdf->Write(5,'Hora de Proceso: '.$hora_actual);
 	
-		
+	
+	
+	
 	//$pdf -> Output($z.".pdf","F");
 	//$output = shell_exec('lpr -P cargos1  /var/www/htdocs/apdosis/htdocs/apdosis/fact/'.$z.'.pdf | lpstat -t' );
 	//echo "<pre>$output</pre>";

@@ -1,14 +1,39 @@
-<!DOCTYPE html>
 <?php
 	ob_start();
-	include('./clases/session.php');
+	include ('./clases/session.php');
 	require_once('../modulos/reporte_ventas.php');
 	require_once('../modulos/layout.php');
 	layout::encabezado();
-
 	layout::menu();
 	layout::ini_content();
+	
 ?>
+<style type="text/css">
+	
+	.red {
+	background-color: red;
+	color: white;
+	}
+	.white {
+	background-color: white;
+	color: black;
+	}
+	.green {
+	background-color: green;
+	color: white;
+	}
+	
+	.blue {
+	background-color: blue;
+	color: white;
+	}
+	.red, .white, .blue, .green {
+	margin: 0.5em;
+	padding: 5px;
+	font-weight: bold;
+	
+	}
+</style>
 <center><h1>Reporte de Ventas</h1></center><p>&nbsp;</p><p>&nbsp;</p>
 <center>
 	<p style="margin-left: 20"><font face="Arial" size="2" color="#000000">Introduzca la fecha que desea buscar</font></p>
@@ -34,75 +59,76 @@
 			//]]></script>
 			
 			<p>&nbsp;</p>
-			Proveedor: <select sformat name="proveedor">
-				<?php 
-					$grow = repventas::provee();
-					foreach($grow as $gw){
-						echo '<option value="'.$gw->id_proveedor.'">'.$gw->nombre.'</option>';
-					}
-				?>
+			Proveedor: <select name="proveedor"><?php 
+				
+				$gres=repventas::select1();
+				
+				foreach($gres as $grow){	?>
+				<option value="<?php echo $grow->id_proveedor ?>"><?php echo $grow->nombre ?></option>
+			<?php } ?>
 			</select>
 			<p>
 				<p>&nbsp;</p>
-				Producto: <input sformat size="100" id="medicamento" name="medicamento" type="text" required />*<input size="100" id="medicamento_id" name="medicamento_id" type="hidden"/>
+				Medicamento: <input size="100" id="medicamento" name="medicamento" type="text"/><input size="100" id="medicamento_id" name="medicamento_id" type="hidden"/>
 				<p>&nbsp;</p>
-				<p>&nbsp;</p>
-				Cliente: <select sformat name="codigo_cliente">
-					<?php 
-						$grow = repventas::cliente();
-						foreach($grow as $gw){
-							echo '<option value="'.$gw->id_cliente.'">'.$gw->nombre.'</option>';
-						}
-					?>
-				</select>
-				<p>
-					<p>&nbsp;</p>
+				
+				<input type="submit" name="reporte" value="Llamar Reporte" class = "blue" >
+			</p></form></center>
+			<?=layout::fin_content()?>
+			<script>
+				function teclas(event) {
+					tecla=(document.all) ? event.keyCode : event.which;
 					
-					<input type="submit" name="reporte" value="Llamar Reporte" class = "blue" >
-				</p></form></center>
-	<?=layout::fin_content()?>
-	<script>
-	function teclas(event) {
-		tecla=(document.all) ? event.keyCode : event.which;
-		
-		if (tecla==13) {
+					if (tecla==13) {
+						
+						event.keyCode = 40; event.charCode = 40; event.which = 1199; break;
+						
+						return false;
+					}
+					
+					return true;
+				}
+			</script>
 			
-			event.keyCode = 40; event.charCode = 40; event.which = 1199; break;
 			
-			return false;
-		}
-		
-		return true;
-	}
-</script>
-
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		
-		//$("#venta").validate();
-		function log(event, data, formatted) {
-			$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
-		}
-		
-		function formatItem(row) {
-			return row[0] + " (<strong>id: " + row[1] + "</strong>)";
-		}
-		function formatResult(row) {
-			return row[0].replace(/(<.+?>)/gi, '');
-		}
-		
-		$("#medicamento").autocomplete({
-			serviceUrl : 'get_medicamento_union.php',
-			paramName : 'q',
-			onSelect: function (data) {
-			$("#medicamento_id").val(data.codigo_interno);
-			}
-		});
-		
-		$("#clear").click(function() {
-			$(":input").unautocomplete();
-		});
-	});
-</script>
-<script language="javascript" type="text/javascript" src="../js/script_com_or.js"></script>
+			<script type="text/javascript">
+				$().ready(function() {
+					
+					$("#venta").validate();
+					function log(event, data, formatted) {
+						$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
+					}
+					
+					function formatItem(row) {
+						return row[0] + " (<strong>id: " + row[1] + "</strong>)";
+					}
+					function formatResult(row) {
+						return row[0].replace(/(<.+?>)/gi, '');
+					}
+					
+					
+					$("#medicamento").autocomplete("get_medicamento_union.php", {
+						width: 500,
+						matchContains: true,
+						mustMatch: false,
+						selectFirst: false
+					});
+					
+					$("#medicamento").result(function(event, data, formatted) {
+						$("#medicamento_id").val(data[1]);
+						
+					});
+					
+					
+					
+					
+					$("#clear").click(function() {
+						$(":input").unautocomplete();
+					});
+					
+					
+					
+				});
+				
+				
+			</script>			

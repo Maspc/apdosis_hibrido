@@ -3,8 +3,8 @@
 	header('Content-Type: text/csv; charset=utf-8');
 	header('Content-Disposition: attachment; filename=reporte_ventas_detalle.csv');
 	ob_start();
-	include('./clases/session.php');
-	require_once('../modulos/reporte_ventasxls.php');
+	include ('./clases/session.php');
+	require_once('../modulos/imprimir_reporteventa_xls.php');
 	
 	if($_POST['tiempo_inicial'] == 2){
 		$hora_inicial = $_POST['hora_inicial'] + 12;
@@ -36,31 +36,35 @@
 	
 	
 	fputcsv($output, array('FECHA', 'HORA', 'USUARIO', 'CAJA', 'SEC.', 'CODIGO DE BARRA','PRODUCTO', 'GRUPO', 'SUB GRUPO', 'PROVEEDOR', 'CANTIDAD', 'PRECIO', 'DESCUENTO', 'IMPUESTO'));
-		
-	$rows = repventasxls::select1($fecha1,$fecha2);
-	foreach($rows as $rw){
-		$fecha = $rw->fecha;
-		$hora = $rw->hora;
-		$ordenado_por = $rw->ordenado_por;
-		$caja_id = $rw->caja_id;
-		$factura = $rw->factura;
-		$codigo_de_barra = $rw->codigo_de_barra;
-		$medicamento = $rw->medicamento;
-		$grupo_medicamento = $rw->grupo_medicamento;
-		$sub_grupo = $rw->sub_grupo;
-		$cantidad = $rw->cantidad;
-		$precio_unitario = $rw->precio_unitario;
-		$descuento_unitario = $rw->descuento_unitario;
-		$impuesto = $rw->impuesto;
-		
-		
-		/*  $g = "select a.id_proveedor, b.nombre, max(fecha_creacion) from medicamento_x_proveedor a, proveedor b where a.medicamento_id = '".$rw->medicamento_id."' and a.id_proveedor = b.id_proveedor group by a.id_proveedor, b.nombre";*/
-				
 	
-		$grow = repventasxls::select2($rw->medicamento_id);
-		if(count($grow) > 0){
-			foreach($grow as $gw){
-				$proveedor = $gw->nombre;
+	$res = imprimir::select1($fecha1,$fecha2);
+	
+    foreach($res as $rows){
+		
+		$fecha = $rows->fecha;
+		$hora = $rows->hora;
+		$ordenado_por = $rows->ordenado_por;
+		$caja_id = $rows->caja_id;
+		$factura = $rows->factura;
+		$codigo_de_barra = $rows->codigo_de_barra;
+		$medicamento = $rows->medicamento;
+		$grupo_medicamento = $rows->grupo_medicamento;
+		$sub_grupo = $rows->sub_grupo;
+		$cantidad = $rows->cantidad;
+		$precio_unitario = $rows->precio_unitario;
+		$descuento_unitario = $rows->descuento_unitario;
+		$impuesto = $rows->impuesto;
+		
+		
+		/*  $g = "select a.id_proveedor, b.nombre, max(fecha_creacion) from medicamento_x_proveedor a, proveedor b where a.medicamento_id = '".$rows->medicamento_id."' and a.id_proveedor = b.id_proveedor group by a.id_proveedor, b.nombre";*/
+		
+		$gres= imprimir::select2($rows->medicamento_id);
+		
+		$gnum = count($gres);
+		
+		if($gnum > 0){
+			foreach($gres as $grow){
+				$proveedor = $grow->nombre;		
 			}
 			
 			}else {
@@ -72,6 +76,8 @@
 		
 		
 		fputcsv($output, $row);
+		
+		
 		
 	}
 	

@@ -1,6 +1,12 @@
 <?php 
-	include ('../clases/session.php'); 
-	require_once('../modulos/facturacion.php');
+	ob_start();
+	include ('./clases/session.php');
+	require_once('../modulos/enviar_factura.php');
+	require_once('../modulos/layout.php');
+	layout::encabezado();
+	layout::menu();
+	layout::ini_content();
+	
 	$userid=$_SESSION['MM_iduser'];
 	
 	/*if (isset($_POST['userid'])){
@@ -356,31 +362,28 @@
 		*/
 		if($credito > 0){
 			$saldo_pendiente = $credito;
-			factura::update1($credito,$codigo_cliente);
+			$bres =enviar_f::update1($credito,$codigo_cliente); 
+			
 			} else {
 			$saldo_pendiente = 0;
 		}
 		
 		$caja_id = 0;
 		
-		$korow = factura::select1($_SESSION['MM_iduser']);
-		foreach($korow as $krw){
-			$caja_id = $krw->caja_id;
-			$nombre = $krw->nombre;
+		$kores = enviar_f::select1($_SESSION['MM_iduser']);
+		
+		foreach($kores as $korow)
+		
+		{
+			$caja_id = $korow->caja_id;
+			$nombre = $korow->nombre;
 			
 		}
 		
 		
-		/*$u = "insert into factura  (
-			ordenado_por,
-			fecha,
-			estado_factura ,
-			id_paciente, codigo_cliente, jubilado, codigo_aseguradora, porcentaje_desc,  publico, total,sub_total, itbms_total,descuento_total, efectivo,tarjeta_credito,tarjeta_clave,credito, saldo_pendiente, cheque, no_cheque, nombre_banco, ref_tdb, ref_tdc,vuelto, caja_id, nombre_cliente) values ( '$userid', '".date('Y-m-d H:i',time())."', 'F',  '$identificacion', '$codigo_cliente', '$jubilado', '$codigo_aseguradora', '$porcentaje_desc', 'S', '$total', '$sub_total', '$itbms_total', '$descuento_total','$efectivo', '$tarjeta_credito', '$clave', '$credito', '$saldo_pendiente', '$cheque', '$no_cheque', '$nombres_banco', '$ref_tdb', '$ref_tdc', '$vuelto', '$caja_id', '$nombre_cliente')";
-			
-			$resu = mysql_query($u, $conn) or die(mysql_error());
-		$g = mysql_insert_id();*/
+		$g = enviar_f::insert1($userid, $identificacion, $codigo_cliente, $jubilado, $codigo_aseguradora, $porcentaje_desc, $total, $sub_total, $itbms_total, $descuento_total,$efectivo, $tarjeta_credito, $clave, $credito, $saldo_pendiente, $cheque, $no_cheque, $nombres_banco, $ref_tdb, $ref_tdc, $vuelto, $caja_id, $nombre_cliente);
 		
-		$g = factura::insert1($userid,$identificacion,$codigo_cliente,$jubilado,$codigo_aseguradora,$porcentaje_desc,$total,$sub_total,$itbms_total,$descuento_total,$efectivo,$tarjeta_credito,$clave,$credito,$saldo_pendiente,$cheque,$no_cheque,$nombres_banco,$ref_tdb,$ref_tdc,$vuelto,$caja_id,$nombre_cliente);
+		
 		echo "<p>";
 		//echo $u;
 		//echo "<p>";
@@ -722,14 +725,21 @@
 				
 				//echo "itbms unitario: ". $_POST["itbms_unitario_$i"];
 				
-				$vrow = factura::select2($_POST["id_articulo_".$i]);
-				foreach($vrow as $vrw){
-					$costo_unitario = $vrw->costo_unitario;
+				$vres = enviar_f::select2($_POST["id_articulo_$i"]);
+				
+				foreach($vres  as $vrow)
+				{
+					$costo_unitario = $vrow->costo_unitario;
 				}
 				
-				factura::insert2($g,$_POST["articulo_$i"],$i,$identificacion,$_POST["id_articulo_$i"],$_POST["cantidad_$i"],$_POST["precio_unitario_$i"],$_POST["itbms_unitario_$i"],$_POST["descuento_unitario_$i"],$_POST["precio_venta_$i"],$costo_unitario);
 				
-				factura::update2($_POST["cantidad_$i"],$_POST["id_articulo_$i"]);
+				
+				$res1r = enviar_f::insert2($g,$_POST["articulo_$i"], $i,$identificacion,$_POST["id_articulo_$i"],$_POST["cantidad_$i"],$_POST["precio_unitario_$i"], $_POST["itbms_unitario_$i"], $_POST["descuento_unitario_$i"], $_POST["precio_venta_$i"],$costo_unitario ); 
+				
+				
+				
+				$kres =enviar_f::update2($_POST["cantidad_$i"],$_POST["id_articulo_$i"]); 
+				
 				
 				//echo "r: ".$r;
 				/*
@@ -825,6 +835,12 @@
 			
 			<center><h2>Previsualizaci&oacute;n de Factura</h2></center><p>";
 			
+			
+			$result =enviar_f::select3($g);
+			
+			
+			
+			
 			echo "<table align='center'>
 			<tr>
 			
@@ -834,19 +850,19 @@
 			<th>Fecha de Factura</th>
 			<th>Usuario</th>
 			</tr>";
+			foreach($result  as $row)
 			
-			$row = factura::select3($g);
-			foreach($row as $rw){
+			{
 				
 				echo "<tr>";
-				echo "<td>" . $rw->factura . "</td>";
+				echo "<td>" . $row->factura . "</td>";
 				echo "<td>" . $nombre_cliente . "</td>";
 				echo "<td>" . $identificacion . "</td>";
-				echo "<td>" . $rw->fecha . "</td>";
-				echo "<td>" . $rw->ordenado_por . "</td>";
+				echo "<td>" . $row->fecha . "</td>";
+				echo "<td>" . $row->ordenado_por . "</td>";
 				echo "</tr>";
 				
-				$codigo_cliente = $rw->codigo_cliente;
+				$codigo_cliente = $row->codigo_cliente;
 				
 				$fact_long = "FACTIC".str_pad($g, 7, 0, STR_PAD_LEFT);
 				$fact_long_min = "factic".str_pad($g, 7, 0, STR_PAD_LEFT);
@@ -859,17 +875,17 @@
 				$descuento_total = 0;
 				$porcentaje_desc = 0;
 				$cheque = 0;
-				$empresa = trim($rw->nombre);
+				$empresa = trim($row->nombre);
 				//$ruc = '9999';
 				$ruc = $identificacion;
-				$total = $rw->total;
-				$efectivo = $rw->efectivo;
-				$tarjeta_debito = $rw->tarjeta_clave;
-				$tarjeta_credito = $rw->tarjeta_credito;
-				$credito = $rw->credito;
-				$descuento_total = $rw->descuento_total;
-				$porcentaje_desc = $rw->porcentaje_desc;
-				$cheque = $rw->cheque;
+				$total = $row->total;
+				$efectivo = $row->efectivo;
+				$tarjeta_debito = $row->tarjeta_clave;
+				$tarjeta_credito = $row->tarjeta_credito;
+				$credito = $row->credito;
+				$descuento_total = $row->descuento_total;
+				$porcentaje_desc = $row->porcentaje_desc;
+				$cheque = $row->cheque;
 				$total_pagado = $efectivo + $tarjeta_debito + $tarjeta_credito + $cheque;
 				$direccion= 'SAN FRANCISCO, URB. PAITILLA - **PUBLICO**';
 				
@@ -877,18 +893,24 @@
 					$porcentaje_desc = round(($descuento_total * 100 / $total),2);
 				}
 				
-				$korow = factura::select4($_SESSION['MM_iduser']);
-				foreach($korow as $krw){
-					$caja_id = $krw->caja_id;
+				
+				$kores =enviar_f::select4($_SESSION['MM_iduser']); 
+				foreach($kores as $korow )
+				
+				{
+					$caja_id = $korow->caja_id;
 					
 				}
 				
 				/*añado parametrización de impresoras fiscales*/
 				
-				$rowspe = factura::select5($caja_id);
-				foreach($rowspe as $rwp){
-					$nombre_carpeta = $rwp->ruta_entrada;
-					$nombre_carpeta2 = $rwp->ruta_salida;
+				$respe =enviar_f::select5($caja_id);
+				
+				foreach($respe as $rowspe)
+				
+				{
+					$nombre_carpeta = $rowspe->ruta_entrada;
+					$nombre_carpeta2 = $rowspe->ruta_salida;
 				}
 				
 				/* fin de añado parametrización de impresoras fiscales */
@@ -928,10 +950,16 @@
 			echo "</table> <p>";
 			
 			$fact_long_mov = "FACMVC".str_pad($g, 7, 0, STR_PAD_LEFT);
-						
+			
+			$resulta =enviar_f::select6($g); 
+			
 			$fp2 = fopen($nombre_carpeta."//".$fact_long_mov.".txt","a");
 			//$fp2 = fopen("/home/apdosis/pos/in1/".$fact_long_mov.".txt","a");
-						
+			
+			
+			
+			
+			
 			echo "<table align='center'>
 			<tr>
 			
@@ -943,16 +971,16 @@
 			<th>Precio Venta</th>
 			
 			</tr>";
+			foreach($resulta as $rows)
 			
-			$rows = factura::select6($g);
-			foreach($rows as $rws){
+			{
 				echo "<tr>";
-				echo "<td>" . $rws->medicamento . "</td>";
-				echo "<td>" . $rws->cantidad . "</td>";
-				echo "<td>" . round($rws->precio_unitario,2) . "</td>";
-				echo "<td>" . round($rws->descuento_unitario,2) . "</td>";
-				echo "<td>" . round($rws->impuesto,2) . "</td>";
-				echo "<td>" . round($rws->precio_venta,2) . "</td>";
+				echo "<td>" . $rows->medicamento . "</td>";
+				echo "<td>" . $rows->cantidad . "</td>";
+				echo "<td>" . round($rows->precio_unitario,2) . "</td>";
+				echo "<td>" . round($rows->descuento_unitario,2) . "</td>";
+				echo "<td>" . round($rows->impuesto,2) . "</td>";
+				echo "<td>" . round($rows->precio_venta,2) . "</td>";
 				
 				
 				echo "</tr>";
@@ -960,23 +988,27 @@
 				
 				
 				
-				$id = $rws->medicamento_id;
-				$med = $rws->medicamento;
+				$id = $rows->medicamento_id;
+				$med = $rows->medicamento;
 				$dosis = 0;
-				$cant = $rws->cantidad;
-				//$precio = (round($rws->precio_unitario,2) - round($rws->descuento_unitario,2)) ;
-				$precio = (round($rws->precio_unitario,2));
-				$descuento_unitario = (round($rws->descuento_unitario,2));
-				$impuesto = $rws->impuesto;
+				$cant = $rows->cantidad;
+				//$precio = (round($rows->precio_unitario'],2) - round($rows['descuento_unitario'],2)) ;
+				$precio = (round($rows->precio_unitario,2));
+				$descuento_unitario = (round($rows->descuento_unitario,2));
+				$impuesto = $rows->impuesto;
 				
 				/**agrego tipo de impuesto**/
-					
-				$crow = factura::select7($id);
-				foreach($crow as $crw){
-					$tipo_impuesto = $crw->tipo_impuesto;
-				}				
+				$cres =  =enviar_f::select7($id); 
+				foreach(cres as $crow)
+				
+				{
+					$tipo_impuesto = $crow->tipo_impuesto;
+				}
+				
 				
 				/**fin de agrego tipo de impuesto**/
+				
+				
 				
 				
 				fwrite($fp2, "$fact_long\t$id\t$med\t$dosis\t$cant\t$precio\t$impuesto\t$descuento_unitario\t$tipo_impuesto".PHP_EOL);
@@ -987,7 +1019,7 @@
 			echo "</table>"; 
 			echo "<p>Espere hasta que se imprima en su totalidad la factura fiscal y de clic al botón Obtener Número Fiscal</p><p></p>";
 			
-			echo "<INPUT TYPE=\"button\" class='blue' value='Obtener Número Fiscal' id='imprimirp' onClick=\"parent.location='numero_fiscal_cierre.php?archivo=".$fact_long_min.".txt&factura=".$g."&carpeta=".addslashes($nombre_carpeta2)."'\" >";
+			echo "<INPUT TYPE=\"button\" class='blue' value='Obtener Número Fiscal' id='imprimirp' onClick=\"parent.location='numero_fiscal_cierre_publico.php?archivo=".$fact_long_min.".txt&factura=".$g."&carpeta=".addslashes($nombre_carpeta2)."'\" >";
 			if($codigo_cliente == 5){
 				echo "<INPUT TYPE=\"button\" class='green' value='Imprimir Labels' id='imprimirl' onClick=\"parent.location='imprimir_labels_l_fa.php?factura=".$g."&nombre_cliente=".$nombre_cliente."'\" >"; 
 			}
@@ -1000,6 +1032,8 @@
 			/*echo "<script language='javascript'>window.location='http://192.168.3.2/cmp_appdosis/'</script>";
 				}
 			*/
+			
 	}
-	
+	layout::fin_content();
 ?>
+

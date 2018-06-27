@@ -5,13 +5,12 @@
 	$q = strtolower($_GET["q"]);
 	if (!$q) return;
 	
-	$rsd = getgen::get_medica2($q);
+	$rsd = getgen::get_medicamento_1($q);
 	$return_arr = array();
-	
+		
 	foreach($rsd as $rs){
-		$row_array['value'] = $rs->nombre;
 		$row_array['codigo_interno'] = $rs->codigo_interno;
-		$row_array['nombre'] = $rs->nombre;
+		$row_array['value'] = $rs->nombre;
 		$row_array['forma_farma'] = $rs->forma_farma;
 		$row_array['tipo_posologia'] = $rs->tipo_posologia;
 		$row_array['tipo_de_dosis'] = $rs->tipo_de_dosis;
@@ -25,9 +24,9 @@
 		$row_array['tipo_volumen'] = $rs->tipo_volumen;
 		$row_array['vol_desc'] = $rs->vol_desc;
 		$row_array['dosis_desc'] = $rs->dosis_desc;
-		$row_array['precio_unitario'] = $rs->precio_unitario;
-		//echo "$mdesc|$mid|$mforma|$mposo|$mtipo|$mfdescr|$mposo2|$mcodi|$mgru|$mprin|$mgrupo|$mvolu|$mtipovol|$mvoldesc|$mdosisdesc|$mprecio\n";
-	    array_push($return_arr,$row_array);
+		$row_array['existencia'] = $rs->existencia;
+		//echo "$mdesc|$mid|$mforma|$mposo|$mtipo|$mfdescr|$mposo2|$mcodi|$mgru|$mprin|$mgrupo|$mvolu|$mtipovol|$mvoldesc|$mdosisdesc|$mexist\n";
+		array_push($return_arr,$row_array);
 	}
 	echo json_encode(array('suggestions' =>$return_arr));
 ?>

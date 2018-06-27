@@ -3,8 +3,8 @@
 	
 	class dvolucpub{
 		
-		public static function select1($user) {
-			$reg = conexion::sqlGet("select a.caja_id, b.nombre from cajas_usuario a, cajas b where a.usuario = '".$user."' and a.caja_id = b.caja_id");			
+		public static function select1($MM_iduser) {
+			$reg = conexion::sqlGet("select a.caja_id, b.nombre from cajas_usuario a, cajas b where a.usuario = '".$MM_iduser."' and a.caja_id = b.caja_id");			
 			return $reg;
 		}
 		

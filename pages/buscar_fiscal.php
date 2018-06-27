@@ -1,17 +1,30 @@
 <?php
+	ob_start();
+	include ('./clases/session.php');
+	require_once('../modulos/buscar_fiscal.php');
+	//$factura = $_GET['factura'];
 	
-	$rows5 = reportez::select5();
-	foreach($rows5 as $rw5){
-		$factura = $rw5->factura;
+	$resulta5 = buscarf::select1();
+	foreach($resulta5 as $rows5){
 		
-		$korow = reportez::select6($factura);
-		foreach($korow as $kw){
-			$caja_id = $kw->caja_id;
-			$carpeta = addslashes($kw->ruta_salida);
+		$factura = $rows5->factura;
+		
+		
+		$kores = buscarf::select2($factura);
+		
+	    foreach($kores as $korow){
+			$caja_id = $korow->caja_id;
+			$carpeta = addslashes($korow->ruta_salida);
+			
 		}
 		
+		
+		
+		
+		
+		
 		$archivo =  "factic".str_pad($factura, 7, 0, STR_PAD_LEFT).".txt";
-		//$carro = $_GET['carro'];
+		//$carro = $_GET->carro;
 		$g = '';
 		$h = '';
 		
@@ -58,13 +71,15 @@
 			
 			if ($g == '') {
 				
-				$berow = reportez::select7($caja_id);
-				foreach($berow as $bw){
-					$g = $bw->nombre_impresora;
-				}				
+				$beres = buscarf::select3($caja_id);
+				foreach($beres as $berow){
+					$g = $berow->nombre_impresora;	   
+				}	   
+				
 			}
 			
-			reportez::update1($h,$g,$archivo,$factura);
+			buscarf::update1($h,$g,$archivo,$factura);
+			
 			/*$s = "update factura set estado_factura = 'I' where factura = '$factura'";
 				
 				$res = mysql_query($s, $conn) or die(mysql_query());
@@ -76,7 +91,7 @@
 				$wres = mysql_query($w,$conn) or die(mysql_error());
 				
 				while($wrow = mysql_fetch_array($wres)){
-				$FA = $wres['FA'];
+				$FA = $wres->FA;
 			}*/
 			
 			// includes nusoap class
@@ -84,18 +99,21 @@
 			
 			
 		}
-		
 	}
 	
-	$rows7 = reportez::select8();
-	foreach($rows7 as $rw7){
-		$devolucion = $rw7->devolucion;	
+	
+	$resulta7 = buscarf::select4();
+	
+	foreach($resulta7 as $rows7){
+		$devolucion = $rows7->devolucion;
 		
-		$korow = reportez::select9($devolucion);
-		foreach($korow as $kw1){
-			$caja_id = $kw1->caja_id;
-			$carpeta = addslashes($kw1->ruta_salida);
+		$kores = buscarf::select5($devolucion);
+		
+		foreach($kores as $korow){
+			$caja_id = $korow->caja_id;
+			$carpeta = addslashes($korow->ruta_salida);			
 		}
+		
 		
 		$archivo =  "nctic".str_pad($devolucion, 7, 0, STR_PAD_LEFT).".txt";
 		//$carro = $_GET['carro'];
@@ -125,9 +143,15 @@
 			list($a,$b,$c,$d,$e,$f,$g,$h,$i,$j,$k)=explode("\t",$str);
 			
 			
+			
 			//echo "<li>".$g; //impresora
 			//echo "<li>".$h; //numero fiscal
-		
+			
+			
+			
+			
+			
+			
 		}
 		
 		
@@ -147,15 +171,24 @@
 			} else { 
 			
 			if ($g == '') {
-				$berow = reportez::select7($caja_id);
-				foreach($berow as $bw1){
-					$g = $bw1->nombre_impresora;
-				}
+				
+				$beres = buscarf::select6($caja_id);
+				
+				foreach($beres as $berow){
+					$g = $berow->nombre_impresora;	   
+				}	     
+				
 			}
 			
-			reportez::update2($h,$g,$archivo,$devolucion);
+			buscarf::update2($h,$g,$archivo,$devolucion);
+			
+			
 			
 		}
-	}
+		
+		
+		
+	} 
+	
+	
 ?>
-

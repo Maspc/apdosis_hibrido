@@ -1,3 +1,10 @@
+<?php
+	ob_start();
+	include ('./clases/session.php');
+	require_once('../modulos/numero_fiscal_cierre.php');
+	require_once('../modulos/layout.php');
+	layout::encabezado();	
+?>
 <style type="text/css">
 	
 	.red {
@@ -23,13 +30,9 @@
 	font-weight: bold;
 	
 	}
+	
 </style>
 <?php
-	include ('../clases/session.php'); 
-	require_once('../modulos/facturacion.php');
-	require_once('../modulos/menu.php');
-	require_once('../modulos/layout.php');
-	layout::encabezado();
 	layout::menu();
 	layout::ini_content();
 	
@@ -44,13 +47,12 @@
 	//$carro = $_GET['carro'];
 	$g = '';
 	$h = '';
-	$myFile = $carpeta."//".$archivo;
-	$myFile2 = $carpeta."//".$archivo2;
+	$myFile = "/opt/factura/".$carpeta."/".$archivo;
+	$myFile2 = "/opt/factura/".$carpeta."/".$archivo2;
 	if (file_exists($myFile)) {
 		$fh = file($myFile);
 		} else {
-		//$fh = file($myFile2);
-		echo "<h1>Refresque la pantalla con el bot&oacute;n F5, procure no apretar el bot&oacute;n de 'Obtener Fiscal' hasta que no haya terminado la impresi&oacute;n de la factura</h1>";
+		$fh = file($myFile2);
 	}
 	
 	
@@ -87,22 +89,31 @@
 		
 		if ($g == '') {
 			
-			$berow = factura::select9($carpeta);
-			foreach($berow as $brw){
-				$g = $brw->nombre;	   
+			$beres=nfc::select1($carpeta);
+			foreach($beres as $berow)
+			
+			{
+				$g = $berow->nombre;	   
 			}	   
 			
 		}
 		
-		factura::update3($h,$g,$archivo,$factura);
 		
-		factura::update4($factura);
 		
-		echo "Se imprimi&oacute; y se factur&oacute;";
-				
-		$wrow = factura::select10($factura);
-		foreach($wrow as $wrw){
-			$FA = $wrw->FA;
+		nfc::update1($h,$g,$k,$archivo,$factura);
+		
+		
+		nfc::update2($factura);
+		
+		
+		echo "Se imprimio y se facturo el cargo.";
+		
+		
+		$wres=nfc::select2($factura);
+		foreach($wres as $wrow)
+		
+		{
+			$FA = $wres->FA;
 		}
 		
 		// includes nusoap class

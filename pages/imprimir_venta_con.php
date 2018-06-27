@@ -1,7 +1,5 @@
 <?php
-	include('./clases/session.php');
-	require_once('../modulos/ventas_diarias_con.php');
-	require_once('./mysql_table.php');
+	require('mysql_table.php');
 	
 	$fecha1 = $_POST['fecha1'];
 	$fecha2 = $_POST['fecha2'];
@@ -21,18 +19,26 @@
 		}
 	}
 	
-	$rowd = ventasd::usuarios($_SESSION['MM_iduser']);
-	foreach($rowd as $rw){
-		$username = $rw->nombre;
+	//Connect to database
+	ob_start();
+	include ('./clases/session.php');
+	require_once('../modulos/imprimir_venta_con.php');
+	
+	$resd = imprimir::select1($_SESSION['MM_iduser']);
+	
+	foreach($resd as $rowd){
+		$username = $rowd->nombre;
 	}
+	
 	
 	$pdf=new PDF();
 	$pdf->AddPage();
 	$pdf->SetFont('Arial','','8');
 	//First table: put all columns automatically
+	$pdf->AddCol('FA',20,'FA', 'C');
 	$pdf->AddCol('factura_fiscal',25,'Fact. Fiscal','C');
 	$pdf->AddCol('fecha_proceso',30,'Fecha Proceso','C');
-	$pdf->AddCol('id_paciente',30,'Id. Cliente','C');
+	$pdf->AddCol('id_paciente',30,'Id. Paciente','C');
 	$pdf->AddCol('nombre_paciente',60,'Nombre','C');
 	$pdf->AddCol('total',20,'Total','C');
 	
@@ -42,7 +48,7 @@
 	'color2'=>array(255,255,210),
 	'padding'=>2);
 	
-	$pdf->Table("SELECT a.FA, a.codigo_cliente as id_paciente, substring(a.nombre_cliente,1,30) as nombre_paciente, round(a.total, 2) as total, a.factura_fiscal, a.fecha_proceso from factura a where a.fecha between '".$fecha1."' and '".$fecha2."' and a.estado_factura = 'I' and a.factura_fiscal != ' ' order by a.factura_fiscal", $prop3);
+	$pdf->Table("SELECT a.FA, a.id_paciente, substring(b.nombre_paciente,1,30) as nombre_paciente, round(a.total, 2) as total, a.factura_fiscal, a.fecha_proceso from factura a, registro b where a.historia = b.historia and a.tratamiento =b.tratamiento and a.cargo = b.cargo and a.fecha between '$fecha1' and '$fecha2' and a.estado_factura = 'I' order by a.factura_fiscal", $prop3);
 	
 	$pdf->Ln(10);
 	$pdf->AddCol('total',20,'Total', 'C');
@@ -55,7 +61,7 @@
 	'padding'=>2);
 	
 	
-	$pdf->Table("SELECT sum(round(a.total,2)) as total from factura a  where a.fecha between '".$fecha1."' and '".$fecha2."' and a.estado_factura = 'I' and a.factura_fiscal != ' ' order by a.factura_fiscal", $prop3);
+	$pdf->Table("SELECT sum(round(a.total,2)) as total from factura a, registro b  where a.historia = b.historia and a.tratamiento =b.tratamiento and a.cargo = b.cargo and a.fecha between '$fecha1' and '$fecha2' and a.estado_factura = 'I'", $prop3);
 	
 	
 	
@@ -64,7 +70,7 @@
 	$pdf->AddPage('L');
 	$pdf->SetFont('Arial','',14);
 	$titulo = 'Facturas de Reemplazo';
-	$pdf->Cell(0,6,$titulo,0,1,'C');
+    $pdf->Cell(0,6,$titulo,0,1,'C');
 	
 	$pdf->SetFont('Arial','','8');
 	$pdf->Ln(10);
@@ -94,7 +100,7 @@
 	and c.historia = d.historia
 	and c.tratamiento = d.tratamiento
 	and c.cargo = d.cargo
-	and a.fecha_creacion between '".$fecha1."' and '".$fecha2."' order by a.factura_fiscal", $prop3);
+	and a.fecha_creacion between '$fecha1' and '$fecha2' order by a.factura_fiscal", $prop3);
 	
 	
 	$pdf->Ln(10);
@@ -109,6 +115,9 @@
 	$pdf->Write(5,$username);
 	$pdf->Ln(10);
 	$pdf->Write(5,'Hora de Proceso: '.$hora_actual);
+	
+	
+	
 	
 	//$pdf -> Output($z.".pdf","F");
 	//$output = shell_exec('lpr -P cargos1  /var/www/htdocs/apdosis/htdocs/apdosis/fact/'.$z.'.pdf | lpstat -t' );

@@ -1,15 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <?php
+	
 	ob_start();
 	include ('./clases/session.php');
 	require_once('../modulos/consulta_producto.php');
 	require_once('../modulos/layout.php');
 	layout::encabezado();
-	
 	layout::menu();
 	layout::ini_content();
+	
 ?>
-
 <center>  <h1>Consultar Inventario</h1> </center>
 <div class="content_box_inner">
 	
@@ -55,11 +54,12 @@
 					<input name="grupo_medicamento" id="grupo_medicamento" size="50" type="hidden" readonly />
 					<input name="multiple_principio" id="multiple_principio" size="50" type="hidden" readonly />
 					<input name="tipo_impuesto" id="tipo_impuesto" size="50" type="hidden" readonly />
-					<input name="precio_publico" id="precio_publico" size="50" type="hidden" readonly />
+					<input name="precio_unitario_pub" id="precio_unitario_pub" size="50" type="hidden" readonly />
 					<input name="importacion" id="importacion" size="50" type="hidden" readonly />
 					<input name="jubilado" id="jubilado" size="50" type="hidden" readonly />
 					<input name="descuento_total" id="descuento_total" size="50" type="hidden" readonly />
 					<input name="anaquel" id="anaquel" size="50" type="hidden" readonly />
+					<input name="tipo_mercancia" id="tipo_mercancia" size="50" type="hidden" readonly />
 				<input name="buscar" id="buscar"  type="submit" value="Consultar" /></label></td>
 			</tr>
 		</table>
@@ -105,67 +105,82 @@
 					$grupo_medicamento = $_POST['grupo_medicamento'];
 					$multiple_principio = $_POST['multiple_principio'];
 					$tipo_impuesto = $_POST['tipo_impuesto'];
-					$precio_publico = $_POST['precio_publico'];
+					$precio_unitario_pub = $_POST['precio_unitario_pub'];
 					$importacion = $_POST['importacion'];
 					$jubilado = $_POST['jubilado'];
 					$descuento_total = $_POST['descuento_total'];
 					$anaquel = $_POST['anaquel'];
+					$tipo_mercancia = $_POST['tipo_mercancia'];
 					
-					$frow = cproducto::select1($medicamento_id);
-					foreach($frow as $fw){
-						$cantidad_inicial_tienda = $fw->cantidad_inicial;
-					}				
+					
+					$fres=cproducto::select1($medicamento_id);
+					foreach($fres as $frow){
+						
+						$cantidad_inicial_tienda = $frow->cantidad_inicial;
+					}
+					
 					
 					
 					} else {
 					//si lo leo dsede el lector
 					
-					$drow = cproducto::select2($_POST['codigo_barras']);										
-					if (count($drow) > 0) {
-						foreach($drow as $dw){
-							$medic = $dw->nombre;
-							$medicamento_id = $dw->codigo_interno;
-							$descri_forma = $dw->forma_descri;
-							$forma_farma = $dw->forma_farma;
-							$precio_unitario = $dw->precio_unitario;
-							$tipo_posologia = $dw->tipo_posologia;
-							$tipo_de_dosis = $dw->tipo_de_dosis;
-							$posologia = $dw->posologia;
-							$codigo_barras = $dw->codigo_de_barra;
-							$precio_unitario = $dw->precio_unitario;
-							$nombre_comercial = $dw->nombre_comercial;
-							$nombre_generico = $dw->nombre_generico;
-							$presentacion = $dw->descr_presentacion;
-							$codigo_presentacion = $dw->presentacion;
-							$cantidad_x_empaque = $dw->cantidad_x_empaque;
-							$volumen = $dw->volumen;
-							$fabricante = $dw->descr_fabricante;
-							$codigo_fabricante = $dw->fabricante;
-							$costo_unitario = $dw->costo_unitario;
-							$costo_caja = $dw->costo_caja;
-							$precio_caja = $dw->precio_caja;
-							$cantidad_inicial = $dw->cantidad_inicial;
-							$tipo_dosis = $dw->tipo_de_dosis;
-							$descr_tipo_dosis = $dw->descr_tipo_dosis;
-							$antibiotico = $dw->antibiotico;
-							$narcotico = $dw->narcotico;
-							$preparacion = $dw->preparacion;
-							$devolver = $dw->permite_devol;
-							$codigo_proveedor = $dw->codigo_proveedor;
-							$tipo_volumen = $dw->tipo_volumen;
-							$grupo_medicamento = $dw->grupo_medicamento;
-							$multiple_principio = $dw->multiple_principio;
-							$tipo_impuesto = $dw->tipo_impuesto;
-							$precio_publico = $dw->precio_publico;
-							$importacion = $dw->importacion;
-							$jubilado = $dw->jubilado;
-							$descuento_total = $dw->descuento_total;
-							$anaquel = $dw->ubicacion;
+					
+					$dres=cproducto::select2($_POST['codigo_barras']);
+					
+					foreach($dres  as $drow){	  
+						$dnum = count($dres);
+						
+						if ($dnum > 0) {
 							
-							$frow = cproducto::select3($medicamento_id);
-							foreach($frow as $frw){
-								$cantidad_inicial_tienda = $frw->cantidad_inicial;
+							$medic = $drow->nombre;
+							$medicamento_id = $drow->codigo_interno;
+							$descri_forma = $drow->forma_descri;
+							$forma_farma = $drow->forma_farma;
+							$precio_unitario = $drow->precio_unitario;
+							$tipo_posologia = $drow->tipo_posologia;
+							$tipo_de_dosis = $drow->tipo_de_dosis;
+							$posologia = $drow->posologia;
+							$codigo_barras = $drow->codigo_de_barra;
+							$precio_unitario = $drow->precio_unitario;
+							$nombre_comercial = $drow->nombre_comercial;
+							$nombre_generico = $drow->nombre_generico;
+							$presentacion = $drow->descr_presentacion;
+							$codigo_presentacion = $drow->presentacion;
+							$cantidad_x_empaque = $drow->cantidad_x_empaque;
+							$volumen = $drow->volumen;
+							$fabricante = $drow->descr_fabricante;
+							$codigo_fabricante = $drow->fabricante;
+							$costo_unitario = $drow->costo_unitario;
+							$costo_caja = $drow->costo_caja;
+							$precio_caja = $drow->precio_caja;
+							$cantidad_inicial = $drow->cantidad_inicial;
+							$tipo_dosis = $drow->tipo_de_dosis;
+							$descr_tipo_dosis = $drow->descr_tipo_dosis;
+							$antibiotico = $drow->antibiotico;
+							$narcotico = $drow->narcotico;
+							$preparacion = $drow->preparacion;
+							$devolver = $drow->permite_devol;
+							$codigo_proveedor = $drow->codigo_proveedor;
+							$tipo_volumen = $drow->tipo_volumen;
+							$grupo_medicamento = $drow->grupo_medicamento;
+							$multiple_principio = $drow->multiple_principio;
+							$tipo_impuesto = $drow->tipo_impuesto;
+							$precio_unitario_pub = $drow->precio_unitario_pub;
+							$importacion = $drow->importacion;
+							$jubilado = $drow->jubilado;
+							$descuento_total = $drow->descuento_total;
+							$anaquel = $drow->ubicacion;
+							$tipo_mercancia = $drow->tipo_mercancia;
+							
+							
+							$fres=cproducto::select3($medicamento_id);
+							
+							foreach($fres as $frow ){
+								
+								$cantidad_inicial_tienda = $frow->cantidad_inicial;
 							}
+							
+							
 						}
 						} else {
 						
@@ -203,16 +218,21 @@
 						$multiple_principio = ' ';
 						$tipo_impuesto = ' ';
 						
-						$precio_publico = ' ';
+						$precio_unitario_pub = ' ';
 						$importacion = ' ';
 						$jubilado = ' ';
 						$cantidad_inicial_tienda = ' ';
 						$descuento_total = ' ';
 						$anaquel = ' ';
+						$tipo_mercancia = ' ';
 					}
 					
 					
 				}
+				
+				
+				
+				
 				
 				echo   "<form id='form1' name='form1' method='post' action='actualizar_med_us.php' onSubmit=\"popupform(this, 'join')\" >
 				<table  border='0' cellspacing='0'>";
@@ -224,8 +244,21 @@
 				echo "<tr><td width='200'>Nombre Producto</td>
 				<td><label><input name='nombre' id='nombre' size='100' type='text'  value='".$medic."' readonly /></label></td>
 				</tr>";
-				echo "<tr><td width='200'>Precio Unitario</td>
+				echo "<tr><td width='200'>Precio Unitario Hospital</td>
 				<td><label><input name='precio_unitario' size='15' type='text'  value='".$precio_unitario."' readonly   /></label></td>
+				</tr>";
+				echo "<tr><td width='200'>Precio Unitario P&uacute;blico</td>
+				<td><label><input name='precio_unitario_pub' size='15' type='text'  value='".$precio_unitario_pub."' readonly   /></label></td>
+				</tr>";
+				
+				if($tipo_mercancia == 1){
+					$tipomer = 'MEDICAMENTO';
+					} else {
+					$tipomer = 'PRODUCTO';
+				}
+				
+				echo "<tr><td width='200'>Tipo Producto</td>
+				<td><label><input name='tipo_mercancia' id='tipo_mercancia' size='15' type='text'  value='".$tipomer."' readonly /></label></td>
 				</tr>";
 				
 				echo "<tr><td width='200'>Existencia Almacen</td>
@@ -243,191 +276,194 @@
 				
 				echo "</table>
 				</form>";
+			    
+				
+			}
+			
+			layout::fin_content();
+		?>
+		<script language="javascript" type="text/javascript">
+			function clearText(field)
+			{
+				if (field.defaultValue == field.value) field.value = '';
+				else if (field.value == '') field.value = field.defaultValue;
+			}
+		</script>
+		<script>
+			function teclas(event) {
+				tecla=(document.all) ? event.keyCode : event.which;
+				
+				if (tecla==13) {
+					
+					event.keyCode = 40; event.charCode = 40; event.which = 1199; break;
+					
+					return false;
+				}
+				
+				return true;
+			}
+		</script>
+		
+		
+		<script type="text/javascript">
+			$().ready(function() {
+				
+				$("#form").validate();
+				function log(event, data, formatted) {
+					$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
+				}
+				
+				function formatItem(row) {
+					return row[0] + " (<strong>id: " + row[1] + "</strong>)";
+				}
+				function formatResult(row) {
+					return row[0].replace(/(<.+?>)/gi, '');
+				}
 				
 				
+				$("#medicamento").autocomplete("get_medicamento_edit_us_con.php", {
+					width: 500,
+					matchContains: true,
+					mustMatch: false,
+					selectFirst: false
+				});
+				
+				$("#codigo_barras").autocomplete("get_barras_edit_us_con.php", {
+					width: 500,
+					matchContains: false,
+					mustMatch: false,
+					selectFirst: true
+				});
+				
+				
+				$("#medicamento").result(function(event, data, formatted) {
+					$("#medicamento_id").val(data[1]);
+					$("#forma_farma").val(data[2]);
+					$("#tipo_posologia").val(data[3]);
+					$("#tipo_de_dosis").val(data[4]);
+					$("#descri_forma").val(data[5]);
+					$("#posologia").val(data[6]);
+					$("#codigo_barras").val(data[7]);
+					$("#precio_unitario").val(data[8]);
+					$("#nombre_comercial").val(data[9]);
+					$("#nombre_generico").val(data[10]);
+					$("#presentacion").val(data[11]);
+					$("#codigo_presentacion").val(data[12]);
+					$("#cantidad_x_empaque").val(data[13]);
+					$("#volumen").val(data[14]);
+					$("#fabricante").val(data[15]);
+					$("#codigo_fabricante").val(data[16]);
+					$("#costo_unitario").val(data[17]);
+					$("#precio_unitario").val(data[18]);
+					$("#costo_caja").val(data[19]);
+					$("#precio_caja").val(data[20]);
+					$("#cantidad_inicial").val(data[21]);
+					$("#tipo_dosis").val(data[22]);
+					$("#descr_tipo_dosis").val(data[23]);
+					$("#antibiotico").val(data[24]);
+					$("#narcotico").val(data[25]);
+					$("#preparacion").val(data[26]);
+					$("#devolver").val(data[27]);
+					$("#codigo_proveedor").val(data[28]);
+					$("#tipo_volumen").val(data[29]);
+					$("#grupo_medicamento").val(data[30]);
+					$("#multiple_principio").val(data[31]);
+					$("#tipo_impuesto").val(data[32]);
+					$("#precio_unitario_pub").val(data[33]);
+					$("#importacion").val(data[34]);
+					$("#jubilado").val(data[35]);
+					$("#descuento_total").val(data[36])
+					$("#anaquel").val(data[37]);
+					$("#tipo_mercancia").val(data[35]);
+				});
+				
+				$("#codigo_barras").result(function(event, data, formatted) {
+					$("#medicamento_id").val(data[1]);
+					$("#forma_farma").val(data[2]);
+					$("#tipo_posologia").val(data[3]);
+					$("#tipo_de_dosis").val(data[4]);
+					$("#descri_forma").val(data[5]);
+					$("#posologia").val(data[6]);
+					$("#medicamento").val(data[7]);
+					$("#precio_unitario").val(data[8]);
+					$("#nombre_comercial").val(data[9]);
+					$("#nombre_generico").val(data[10]);
+					$("#presentacion").val(data[11]);
+					$("#codigo_presentacion").val(data[12]);
+					$("#cantidad_x_empaque").val(data[13]);
+					$("#volumen").val(data[14]);
+					$("#fabricante").val(data[15]);
+					$("#codigo_fabricante").val(data[16]);
+					$("#costo_unitario").val(data[17]);
+					$("#precio_unitario").val(data[18]);
+					$("#costo_caja").val(data[19]);
+					$("#precio_caja").val(data[20]);
+					$("#cantidad_inicial").val(data[21]);
+					$("#tipo_dosis").val(data[22]);
+					$("#descr_tipo_dosis").val(data[23]);
+					$("#antibiotico").val(data[24]);
+					$("#narcotico").val(data[25]);
+					$("#preparacion").val(data[26]);
+					$("#devolver").val(data[27]);
+					$("#medicamento").val(data[28]);
+					$("#codigo_proveedor").val(data[29]);
+					$("#tipo_volumen").val(data[30]);
+					$("#grupo_medicamento").val(data[31]);
+					$("#multiple_principio").val(data[32]);
+					$("#tipo_impuesto").val(data[33]);
+					$("#precio_unitario_pub").val(data[34]);
+					$("#importacion").val(data[35]);
+					$("#jubilado").val(data[36]);
+					$("#descuento_total").val(data[37])
+					$("#anaquel").val(data[38]);
+					$("#tipo_mercancia").val(data[36]);
+					
+				});
+				
+				
+				$("#clear").click(function() {
+					$(":input").unautocomplete();
+				});
+				
+				
+				
+			});
+			
+			
+		</script>
+		
+		
+		<script language="javascript">
+			<!-- Begin
+			function popUp(URL) {
+				day = new Date();
+				id = day.getTime();
+				eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,width=400,height=400');");
 			}
 			
-		?>         
-		
-		<div class="cleaner"></div>
-	</div>
-	
-</div>
-<?=layout::fin_content()?>
-<script language="javascript" type="text/javascript">
-	function clearText(field)
-	{
-		if (field.defaultValue == field.value) field.value = '';
-		else if (field.value == '') field.value = field.defaultValue;
-	}
-</script>
-
-<script>
-	function teclas(event) {
-		tecla=(document.all) ? event.keyCode : event.which;
-		
-		if (tecla==13) {
 			
-			event.keyCode = 40; event.charCode = 40; event.which = 1199; break;
 			
-			return false;
-		}
-		
-		return true;
-	}
-</script>
-
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		
-		//$("#form").validate();
-		function log(event, data, formatted) {
-			$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
-		}
-		
-		function formatItem(row) {
-			return row[0] + " (<strong>id: " + row[1] + "</strong>)";
-		}
-		function formatResult(row) {
-			return row[0].replace(/(<.+?>)/gi, '');
-		}		
-		
-		$("#medicamento").autocomplete({
-			serviceUrl : 'get_medicamento_edit_us_con.php',
-			paramName : 'q',
-			onSelect: function (data) {			
-			$("#medicamento_id").val(data.codigo_interno);
-			$("#forma_farma").val(data.forma_farma);
-			$("#tipo_posologia").val(data.tipo_posologia);
-			$("#tipo_de_dosis").val(data.tipo_de_dosis);
-			$("#descri_forma").val(data.forma_descri);
-			$("#posologia").val(data.posologia);
-			$("#codigo_barras").val(data.codigo_de_barra);
-			$("#precio_unitario").val(data.precio_unitario);
-			$("#nombre_comercial").val(data.nombre_comercial);
-			$("#nombre_generico").val(data.nombre_generico);
-			$("#presentacion").val(data.descr_presentacion);
-			$("#codigo_presentacion").val(data.presentacion);
-			$("#cantidad_x_empaque").val(data.cantidad_x_empaque);
-			$("#volumen").val(data.volumen);
-			$("#fabricante").val(data.descr_fabricante);
-			$("#codigo_fabricante").val(data.fabricante);
-			$("#costo_unitario").val(data.costo_unitario);
-			$("#precio_unitario").val(data.precio_unitario);
-			$("#costo_caja").val(data.costo_caja);
-			$("#precio_caja").val(data.precio_caja);
-			$("#cantidad_inicial").val(data.cantidad_inicial);
-			$("#tipo_dosis").val(data.tipo_de_dosis);
-			$("#descr_tipo_dosis").val(data.descr_tipo_dosis);
-			$("#antibiotico").val(data.antibiotico);
-			$("#narcotico").val(data.narcotico);
-			$("#preparacion").val(data.preparacion);
-			$("#devolver").val(data.permite_devol);
-			$("#codigo_proveedor").val(data.codigo_proveedor);
-			$("#tipo_volumen").val(data.tipo_volumen);
-			$("#grupo_medicamento").val(data.grupo_medicamento);
-			$("#multiple_principio").val(data.multiple_principio);
-			$("#tipo_impuesto").val(data.tipo_impuesto);
-			$("#precio_publico").val(data.precio_publico);
-			$("#importacion").val(data.importacion);
-			$("#jubilado").val(data.jubilado);
-			$("#descuento_total").val(data.descuento_total)
-			$("#anaquel").val(data.ubicacion);
-			
+			function popupform(myform, windowname)
+			{
+				
+				if (! window.focus)return true;
+				
+				window.open('', windowname, 'width=500,height=200, toolbar=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
+				myform.target=windowname;
+				return true;
 			}
-		});
-		
-		$("#codigo_barras").autocomplete({
-			serviceUrl : 'get_barras_edit_us_con.php',
-			paramName : 'q',
-			onSelect: function (data) {			
-			$("#medicamento_id").val(data.codigo_interno);
-			$("#forma_farma").val(data.forma_farma);
-			$("#tipo_posologia").val(data.tipo_posologia);
-			$("#tipo_de_dosis").val(data.tipo_de_dosis);
-			$("#descri_forma").val(data.forma_descri);
-			$("#posologia").val(data.posologia);
-			$("#medicamento").val(data.nombre);
-			$("#precio_unitario").val(data.precio_unitario);
-			$("#nombre_comercial").val(data.nombre_comercial);
-			$("#nombre_generico").val(data.nombre_generico);
-			$("#presentacion").val(data.descr_presentacion);
-			$("#codigo_presentacion").val(data.presentacion);
-			$("#cantidad_x_empaque").val(data.cantidad_x_empaque);
-			$("#volumen").val(data.volumen);
-			$("#fabricante").val(data.descr_fabricante);
-			$("#codigo_fabricante").val(data.fabricante);
-			$("#costo_unitario").val(data.costo_unitario);
-			$("#precio_unitario").val(data.precio_unitario);
-			$("#costo_caja").val(data.costo_caja);
-			$("#precio_caja").val(data.precio_caja);
-			$("#cantidad_inicial").val(data.cantidad_inicial);
-			$("#tipo_dosis").val(data.tipo_de_dosis);
-			$("#descr_tipo_dosis").val(data.descr_tipo_dosis);
-			$("#antibiotico").val(data.antibiotico);
-			$("#narcotico").val(data.narcotico);
-			$("#preparacion").val(data.preparacion);
-			$("#devolver").val(data.permite_devol);
-			$("#codigo_proveedor").val(data.codigo_proveedor);
-			$("#tipo_volumen").val(data.tipo_volumen);
-			$("#grupo_medicamento").val(data.grupo_medicamento);
-			$("#multiple_principio").val(data.multiple_principio);
-			$("#tipo_impuesto").val(data.tipo_impuesto);
-			$("#precio_publico").val(data.precio_publico);
-			$("#importacion").val(data.importacion);
-			$("#jubilado").val(data.jubilado);
-			$("#descuento_total").val(data.descuento_total)
-			$("#anaquel").val(data.ubicacion);
 			
-			}
-		});
+			
+			// End -->
+		</script>
 		
-		
-		$("#clear").click(function() {
-			$(":input").unautocomplete();
-		});
-		
-		
-		
-	});
-	
-	
-</script>
-
-
-<script language="javascript">
-	<!-- Begin
-	function popUp(URL) {
-		day = new Date();
-		id = day.getTime();
-		eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,width=400,height=400');");
-	}
-	
-	
-	
-	function popupform(myform, windowname)
-	{
-		
-		if (! window.focus)return true;
-		
-		window.open('', windowname, 'width=500,height=200, toolbar=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
-		myform.target=windowname;
-		return true;
-	}
-	
-	
-	// End -->
-</script>
-
-<script type="text/javascript">
-	function modalWin(url) {
-		if (window.showModalDialog) {
-			window.showModalDialog(url,"name","dialogWidth:500px;dialogHeight:200px");
-			} else {
-			alert(url);
-			window.open(url,'name','height=500,width=600,toolbar=no,directories=no,status=no, menubar=no,scrollbars=no,resizable=no ,modal=yes');
-		}
-	} 
-</script>
-<script language="javascript" type="text/javascript" src="../js/script_com_or.js"></script>
+		<script type="text/javascript">
+			function modalWin(url) {
+				if (window.showModalDialog) {
+					window.showModalDialog(url,"name","dialogWidth:500px;dialogHeight:200px");
+					} else {
+					alert(url);
+					window.open(url,'name','height=500,width=600,toolbar=no,directories=no,status=no, menubar=no,scrollbars=no,resizable=no ,modal=yes');
+				}
+			} 
+		</script>		
