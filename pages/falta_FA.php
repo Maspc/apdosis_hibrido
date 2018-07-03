@@ -243,4 +243,4 @@ echo  "</tr></table>";
 			window.open(url,'name','height=500,width=600,toolbar=yes,directories=no,status=no, menubar=no,scrollbars=no,resizable=no ,modal=yes');
 		}
 	} 
-	</script>	
+	</script>

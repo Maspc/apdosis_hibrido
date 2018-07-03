@@ -318,7 +318,7 @@
 		<script type="text/javascript">
 			$().ready(function() {
 				
-				$("#formulario").validate();
+				//$("#formulario").validate();
 				
 				function log(event, data, formatted) {
 					$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
@@ -331,64 +331,43 @@
 					return row[0].replace(/(<.+?>)/gi, '');
 				}
 				
-				
-				$("#medicamento").autocomplete("get_medicamento_com1.php", {
-					width: 500,
-					matchContains: true,
-					mustMatch: false,
-					selectFirst: false
+				$("#medicamento").autocomplete({
+					serviceUrl : 'get_medicamento_com1.php',
+					paramName : 'q',
+					onSelect: function (data) {
+						$("#medicamento_id").val(data.codigo_interno);
+						$("#forma_farma").val(data.forma_farma);
+						$("#dosis_tipo").val(data.tipo_de_dosis);
+						$("#tipo_de_dosis").val(data.tipo_de_dosis);
+						$("#descri_forma").val(data.forma_descri);
+						$("#posologia").val(data.posologia);
+						$("#codigo_de_barra").val(data.codigo_de_barra);
+						$("#tipo_impuesto").val(data.tipo_impuesto);
+					}
 				});
 				
-				$("#medicamento").result(function(event, data, formatted) {
-					$("#medicamento_id").val(data[1]);
-					$("#forma_farma").val(data[2]);
-					$("#dosis_tipo").val(data[3]);
-					$("#tipo_de_dosis").val(data[4]);
-					$("#descri_forma").val(data[5]);
-					$("#posologia").val(data[6]);
-					$("#codigo_de_barra").val(data[7]);
-					$("#tipo_impuesto").val(data[8]);
-				});
-				
-				$("#codigo_de_barra").autocomplete("get_barras_com1.php", {
-					width: 500,
-					matchContains: true,
-					mustMatch: false,
-					selectFirst: true
-				});
-				
-				$("#codigo_de_barra").result(function(event, data, formatted) {
-					$("#medicamento_id").val(data[1]);
-					$("#forma_farma").val(data[2]);
-					$("#dosis_tipo").val(data[3]);
-					$("#tipo_de_dosis").val(data[4]);
-					$("#descri_forma").val(data[5]);
-					$("#posologia").val(data[6]);
-					$("#medicamento").val(data[7]);
-					$("#tipo_impuesto").val(data[8]);
+				$("#codigo_de_barra").autocomplete({
+					serviceUrl : 'get_barras_com1.php',
+					paramName : 'q',
+					onSelect: function (data) {
+						$("#medicamento_id").val(data.codigo_interno);
+						$("#forma_farma").val(data.forma_farma);
+						$("#dosis_tipo").val(data.tipo_de_dosis);
+						$("#tipo_de_dosis").val(data.tipo_de_dosis);
+						$("#descri_forma").val(data.forma_descri);
+						$("#posologia").val(data.posologia);
+						$("#medicamento").val(data.nombre);
+						$("#tipo_impuesto").val(data.tipo_impuesto);
+					}
 				});
 				
 				
-				$("#nommedico").autocomplete("get_medico.php", {
-					width: 500,
-					matchContains: true,
-					mustMatch: false,
-					selectFirst: false
-				});
-				
-				$("#nommedico").result(function(event, data, formatted) {
-					$("#medico").val(data[1]);
-				});
-				
-				$("#proveedor_desc").autocomplete("get_proveedor.php", {
-					width: 500,
-					matchContains: true,
-					mustMatch: false,
-					selectFirst: false
-				});
-				
-				$("#proveedor_desc").result(function(event, data, formatted) {
-					$("#proveedor").val(data[1]);
+				$("#proveedor_desc").autocomplete({
+					serviceUrl : 'get_proveedor.php',
+					paramName : 'q',
+					onSelect: function (data) {
+						$("#proveedor").val(data.nombre);
+					}
 				});
 				
 				/*
@@ -495,4 +474,4 @@
 				}
 				
 			}
-		</script>		
+		</script>				

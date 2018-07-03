@@ -149,7 +149,7 @@
 					
 					$_SESSION['anaquel'] = 	$_POST['anaquel'];
 					
-						
+					
 					$bres = conteoi::select2($_POST['anaquel']);
 					
 					foreach($bres as $brow){
@@ -167,11 +167,11 @@
 					
 					if($dnum == 0){
 						conteoi::insert1($id_conteo,$_POST['anaquel'],$_POST['codigo_de_barra'],$_POST['medicamento'],$_POST['medicamento_id'],$_POST['cantidad'],$_POST['cambiar_desc'],$_SESSION['MM_iduser']);
-							
+						
 						/////////aqui ajusto inventario
 						
 						//busco que no haya el mismo producto para este conteo en otro anaquel
-					
+						
 					    $deres = conteoi::select4($_POST['anaquel'],$_POST['medicamento_id']);
 						
 						$denum = count($deres);
@@ -283,9 +283,9 @@
 			
 			
 			<script type="text/javascript">
-				$().ready(function() {
+				$(document).ready(function() {
 					
-					$("#formulario").validate();
+					//$("#formulario").validate();
 					
 					function log(event, data, formatted) {
 						$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
@@ -299,66 +299,49 @@
 					}
 					
 					
-					$("#medicamento").autocomplete("get_medicamento.php", {
-						width: 500,
-						matchContains: true,
-						mustMatch: false,
-						selectFirst: false
+					$("#medicamento").autocomplete({
+						serviceUrl : 'get_medicamento.php',
+						paramName : 'q',
+						onSelect: function (data) {
+						    $("#medicamento_id").val(data.codigo_interno);
+							$("#forma_farma").val(data.forma_farma);
+							$("#dosis_tipo").val(data.tipo_de_dosis);
+							$("#tipo_de_dosis").val(data.tipo_de_dosis);
+							$("#descri_forma").val(data.forma_descri);
+							$("#posologia").val(data.posologia);
+							$("#grupo_med").val('');
+							$("#tipo_impuesto").val(data.tipo_impuesto);
+							$("#existencia").val('');
+							$("#codigo_de_barra").val(data.codigo_de_barra);
+						}
 					});
 					
-					$("#medicamento").result(function(event, data, formatted) {
-						$("#medicamento_id").val(data[1]);
-						$("#forma_farma").val(data[2]);
-						$("#dosis_tipo").val(data[3]);
-						$("#tipo_de_dosis").val(data[4]);
-						$("#descri_forma").val(data[5]);
-						$("#posologia").val(data[6]);
-						$("#grupo_med").val(data[7]);
-						$("#tipo_impuesto").val(data[8]);
-						$("#existencia").val(data[9]);
-						$("#codigo_de_barra").val(data[10]);
+					$("#codigo_de_barra").autocomplete({
+						serviceUrl : 'get_barras_com1.php',
+						paramName : 'q',
+						onSelect: function (data) {
+						 $("#medicamento_id").val(data.codigo_interno);
+							$("#forma_farma").val(data.forma_farma);
+							$("#dosis_tipo").val(data.tipo_de_dosis);
+							$("#tipo_de_dosis").val(data.tipo_de_dosis);
+							$("#descri_forma").val(data.forma_descri);
+							$("#posologia").val(data.posologia);
+							$("#medicamento").val(data.nombre);
+							$("#tipo_impuesto").val(data.tipo_impuesto);
+							$("#existencia").val('');
+						}
 					});
 					
-					$("#nommedico").autocomplete("get_medico.php", {
-						width: 500,
-						matchContains: true,
-						mustMatch: false,
-						selectFirst: false
-					});
-					
-					$("#nommedico").result(function(event, data, formatted) {
-						$("#medico").val(data[1]);
-					});
-					
-					$("#codigo_de_barra").autocomplete("get_barras_com1.php", {
-						width: 500,
-						matchContains: true,
-						mustMatch: false,
-						selectFirst: true
-					});
-					
-					$("#codigo_de_barra").result(function(event, data, formatted) {
-						$("#medicamento_id").val(data[1]);
-						$("#forma_farma").val(data[2]);
-						$("#dosis_tipo").val(data[3]);
-						$("#tipo_de_dosis").val(data[4]);
-						$("#descri_forma").val(data[5]);
-						$("#posologia").val(data[6]);
-						$("#medicamento").val(data[7]);
-						$("#tipo_impuesto").val(data[8]);
-						$("#existencia").val(data[9]);
-					});
-					
-					$("#proveedor_desc").autocomplete("get_proveedor.php", {
+					/*$("#proveedor_desc").autocomplete("get_proveedor.php", {
 						width: 500,
 						matchContains: true,
 						mustMatch: true,
 						selectFirst: true
-					});
-					
-					$("#proveedor_desc").result(function(event, data, formatted) {
+						});
+						
+						$("#proveedor_desc").result(function(event, data, formatted) {
 						$("#proveedor").val(data[1]);
-					});
+					});*/
 					
 					/*
 						$("#identificacion").autocomplete("get_personas.php", {
@@ -472,4 +455,4 @@
 					}
 					
 				}
-			</script>						
+			</script>												

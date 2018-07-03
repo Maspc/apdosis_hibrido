@@ -92,9 +92,9 @@
 			
 			
 			<script type="text/javascript">
-				$().ready(function() {
+				$(document).ready(function() {
 					
-					$("#venta").validate();
+					//$("#venta").validate();
 					function log(event, data, formatted) {
 						$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
 					}
@@ -106,20 +106,13 @@
 						return row[0].replace(/(<.+?>)/gi, '');
 					}
 					
-					
-					$("#medicamento").autocomplete("get_medicamento_union.php", {
-						width: 500,
-						matchContains: true,
-						mustMatch: false,
-						selectFirst: false
+					$("#medicamento").autocomplete({
+						serviceUrl : 'get_medicamento_union.php',
+						paramName : 'q',
+						onSelect: function (data) {
+							$("#medicamento_id").val(data.codigo_interno);
+						}
 					});
-					
-					$("#medicamento").result(function(event, data, formatted) {
-						$("#medicamento_id").val(data[1]);
-						
-					});
-					
-					
 					
 					
 					$("#clear").click(function() {
@@ -131,4 +124,4 @@
 				});
 				
 				
-			</script>			
+			</script>						

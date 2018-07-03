@@ -434,9 +434,3 @@ echo "<h2>Este cargo fue interrumpido!!!</h2>";
   font-weight: bold;
 
 }</style></head><body><h1>CARGO FINALIZADO</h1><p><input type="button" name="cerrar" value="Cerrar Ventana" onClick="window.close();" class="green"/></body></html>
-
-
-
-
-
-

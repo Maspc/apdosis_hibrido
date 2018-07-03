@@ -436,13 +436,13 @@ echo "<tr>
 </tr>"; ?>
 
 <tr><td></td>
-<td><label><input type="button" name="actualizar_contra" value="Actualizar Contraindicaciones" id="actualizar_contra" onClick="javascript:popUp('actualizar_contra.php?codigo_de_barra=<?php echo $codigo_barras; ?>&men=0')" /></label></td>
+	<td><label><input type="button" name="actualizar_contra" value="Actualizar Contraindicaciones" id="actualizar_contra" onClick="javascript:popUp('actualizar_contra.php?codigo_de_barra=<?php echo $codigo_barras; ?>&men=0')" /></label></td>
 </tr>
 <tr><td></td>
-<td><label><input type="button" name="actualizar_prov" value="Actualizar Proveedores" id="actualizar_prov" onClick="javascript:popUp('actualizar_prov.php?codigo_de_barra=<?php echo $codigo_barras; ?>&men=0')" /></label></td>
+	<td><label><input type="button" name="actualizar_prov" value="Actualizar Proveedores" id="actualizar_prov" onClick="javascript:popUp('actualizar_prov.php?codigo_de_barra=<?php echo $codigo_barras; ?>&men=0')" /></label></td>
 </tr>
 <tr><td></td>
-<td><label><input type="button" name="actualizar_bancos" value="Actualizar Bancos" id="actualizar_bancos" onClick="javascript:popUp('actualizar_bancos.php?codigo_de_barra=<?php echo $codigo_barras; ?>&men=0')" /></label></td>
+	<td><label><input type="button" name="actualizar_bancos" value="Actualizar Bancos" id="actualizar_bancos" onClick="javascript:popUp('actualizar_bancos.php?codigo_de_barra=<?php echo $codigo_barras; ?>&men=0')" /></label></td>
 </tr>
 
 <?php
@@ -460,186 +460,176 @@ layout::fin_content();
 
 ?>
 <script language="javascript" type="text/javascript">
-function clearText(field)
-{
-if (field.defaultValue == field.value) field.value = '';
-else if (field.value == '') field.value = field.defaultValue;
-}
+	function clearText(field)
+	{
+		if (field.defaultValue == field.value) field.value = '';
+		else if (field.value == '') field.value = field.defaultValue;
+	}
 </script>
 <script>
-function teclas(event) {
-tecla=(document.all) ? event.keyCode : event.which;
-
-if (tecla==13) {
-
-event.keyCode = 40; event.charCode = 40; event.which = 1199; break;
-
-return false;
-}
-
-return true;
-}
+	function teclas(event) {
+		tecla=(document.all) ? event.keyCode : event.which;
+		
+		if (tecla==13) {
+			
+			event.keyCode = 40; event.charCode = 40; event.which = 1199; break;
+			
+			return false;
+		}
+		
+		return true;
+	}
 </script>
 
 
 <script type="text/javascript">
-$().ready(function() {
-
-$("#form").validate();
-function log(event, data, formatted) {
-$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
-}
-
-function formatItem(row) {
-return row[0] + " (<strong>id: " + row[1] + "</strong>)";
-}
-function formatResult(row) {
-return row[0].replace(/(<.+?>)/gi, '');
-}
-
-
-$("#medicamento").autocomplete("get_medicamento_edit_us.php", {
-width: 500,
-matchContains: true,
-mustMatch: false,
-selectFirst: false
-});
-
-$("#codigo_barras").autocomplete("get_barras_edit_us.php", {
-width: 500,
-matchContains: false,
-mustMatch: false,
-selectFirst: true
-});
-
-
-$("#medicamento").result(function(event, data, formatted) {
-$("#medicamento_id").val(data[1]);
-$("#forma_farma").val(data[2]);
-$("#tipo_posologia").val(data[3]);
-$("#tipo_de_dosis").val(data[4]);
-$("#descri_forma").val(data[5]);
-$("#posologia").val(data[6]);
-$("#codigo_barras").val(data[7]);
-$("#precio_unitario").val(data[8]);
-$("#nombre_comercial").val(data[9]);
-$("#nombre_generico").val(data[10]);
-$("#presentacion").val(data[11]);
-$("#codigo_presentacion").val(data[12]);
-$("#cantidad_x_empaque").val(data[13]);
-$("#volumen").val(data[14]);
-$("#fabricante").val(data[15]);
-$("#codigo_fabricante").val(data[16]);
-$("#costo_unitario").val(data[17]);
-$("#precio_unitario").val(data[18]);
-$("#costo_caja").val(data[19]);
-$("#precio_caja").val(data[20]);
-$("#cantidad_inicial").val(data[21]);
-$("#tipo_dosis").val(data[22]);
-$("#descr_tipo_dosis").val(data[23]);
-$("#antibiotico").val(data[24]);
-$("#narcotico").val(data[25]);
-$("#preparacion").val(data[26]);
-$("#devolver").val(data[27]);
-$("#codigo_proveedor").val(data[28]);
-$("#tipo_volumen").val(data[29]);
-$("#grupo_medicamento").val(data[30]);
-$("#multiple_principio").val(data[31]);
-$("#tipo_impuesto").val(data[32]);
-$("#estado_med").val(data[33]);
-$("#importacion").val(data[34]);
-$("#precio_publico").val(data[35]);
-$("#jubilado").val(data[36]);
-$("#descuento_total").val(data[37]);
-$("#cant_max_prov").val(data[38]);
-$("#anaquel").val(data[39]);
-$("#precio_unitario_pub").val(data[40]);
-$("#prod_hosp").val(data[41]);
-$("#prod_pub").val(data[42]);
-
-});
-
-$("#codigo_barras").result(function(event, data, formatted) {
-$("#medicamento_id").val(data[1]);
-$("#forma_farma").val(data[2]);
-$("#tipo_posologia").val(data[3]);
-$("#tipo_de_dosis").val(data[4]);
-$("#descri_forma").val(data[5]);
-$("#posologia").val(data[6]);
-$("#medicamento").val(data[7]);
-$("#precio_unitario").val(data[8]);
-$("#nombre_comercial").val(data[9]);
-$("#nombre_generico").val(data[10]);
-$("#presentacion").val(data[11]);
-$("#codigo_presentacion").val(data[12]);
-$("#cantidad_x_empaque").val(data[13]);
-$("#volumen").val(data[14]);
-$("#fabricante").val(data[15]);
-$("#codigo_fabricante").val(data[16]);
-$("#costo_unitario").val(data[17]);
-$("#precio_unitario").val(data[18]);
-$("#costo_caja").val(data[19]);
-$("#precio_caja").val(data[20]);
-$("#cantidad_inicial").val(data[21]);
-$("#tipo_dosis").val(data[22]);
-$("#descr_tipo_dosis").val(data[23]);
-$("#antibiotico").val(data[24]);
-$("#narcotico").val(data[25]);
-$("#preparacion").val(data[26]);
-$("#devolver").val(data[27]);
-$("#medicamento").val(data[28]);
-$("#codigo_proveedor").val(data[29]);
-$("#tipo_volumen").val(data[30]);
-$("#grupo_medicamento").val(data[31]);
-$("#multiple_principio").val(data[32]);
-$("#tipo_impuesto").val(data[33]);
-$("#estado_med").val(data[34]);
-$("#importacion").val(data[35]);
-$("#precio_publico").val(data[36]);
-$("#jubilado").val(data[37]);
-$("#descuento_total").val(data[38]);
-$("#cant_max_prov").val(data[39]);
-$("#anaquel").val(data[40]);
-$("#precio_unitario_pub").val(data[41]);
-$("#prod_hosp").val(data[42]);
-$("#prod_pub").val(data[43]);
-});
-
-
-$("#clear").click(function() {
-$(":input").unautocomplete();
-});
-
-
-
-});
-
-
+	$(document).ready(function() {
+		
+		//$("#form").validate();
+		function log(event, data, formatted) {
+			$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
+		}
+		
+		function formatItem(row) {
+			return row[0] + " (<strong>id: " + row[1] + "</strong>)";
+		}
+		function formatResult(row) {
+			return row[0].replace(/(<.+?>)/gi, '');
+		}		
+		
+		$("#medicamento").autocomplete({
+			serviceUrl : 'get_medicamento_edit_us.php',
+			paramName : 'q',
+			onSelect: function (data) {
+				$("#medicamento_id").val(data.codigo_interno);
+				$("#forma_farma").val(data.forma_farma);
+				$("#tipo_posologia").val(data.tipo_posologia);
+				$("#tipo_de_dosis").val(data.tipo_de_dosis);
+				$("#descri_forma").val(data.forma_descri);
+				$("#posologia").val(data.posologia);
+				$("#codigo_barras").val(data.codigo_de_barra);
+				$("#precio_unitario").val(data.precio_unitario);
+				$("#nombre_comercial").val(data.nombre_comercial);
+				$("#nombre_generico").val(data.nombre_generico);
+				$("#presentacion").val(data.descr_presentacion);
+				$("#codigo_presentacion").val(data.presentacion);
+				$("#cantidad_x_empaque").val(data.cantidad_x_empaque);
+				$("#volumen").val(data.volumen);
+				$("#fabricante").val(data.descr_fabricante);
+				$("#codigo_fabricante").val(data.fabricante);
+				$("#costo_unitario").val(data.costo_unitario);
+				$("#precio_unitario").val(data.precio_unitario);
+				$("#costo_caja").val(data.costo_caja);
+				$("#precio_caja").val(data.precio_caja);
+				$("#cantidad_inicial").val(data.cantidad_inicial);
+				$("#tipo_dosis").val(data.tipo_de_dosis);
+				$("#descr_tipo_dosis").val(data.descr_tipo_dosis);
+				$("#antibiotico").val(data.antibiotico);
+				$("#narcotico").val(data.narcotico);
+				$("#preparacion").val(data.preparacion);
+				$("#devolver").val(data.permite_devol);
+				$("#codigo_proveedor").val(data.codigo_proveedor);
+				$("#tipo_volumen").val(data.tipo_volumen);
+				$("#grupo_medicamento").val(data.grupo_medicamento);
+				$("#multiple_principio").val(data.multiple_principio);
+				$("#tipo_impuesto").val(data.tipo_impuesto);
+				$("#estado_med").val(data.estado_med);
+				$("#importacion").val(data.importacion);
+				$("#precio_publico").val(data.precio_publico);
+				$("#jubilado").val(data.jubilado);
+				$("#descuento_total").val(data.descuento_total);
+				$("#cant_max_prov").val(data.cant_max_prov);
+				$("#anaquel").val(data.anaquel);
+				$("#precio_unitario_pub").val(data.precio_unitario_pub);
+				$("#prod_hosp").val(data.prod_hosp);
+				$("#prod_pub").val(data.prod_pub);
+			}
+		});
+		
+		$("#codigo_barras").autocomplete({
+			serviceUrl : 'get_barras_edit_us.php',
+			paramName : 'q',
+			onSelect: function (data) {
+				$("#medicamento_id").val(data.codigo_interno);
+				$("#forma_farma").val(data.forma_farma);
+				$("#tipo_posologia").val(data.tipo_posologia);
+				$("#tipo_de_dosis").val(data.tipo_de_dosis);
+				$("#descri_forma").val(data.forma_descri);
+				$("#posologia").val(data.posologia);
+				$("#medicamento").val(data.nombre);
+				$("#precio_unitario").val(data.precio_unitario);
+				$("#nombre_comercial").val(data.nombre_comercial);
+				$("#nombre_generico").val(data.nombre_generico);
+				$("#presentacion").val(data.descr_presentacion);
+				$("#codigo_presentacion").val(data.presentacion);
+				$("#cantidad_x_empaque").val(data.cantidad_x_empaque);
+				$("#volumen").val(data.volumen);
+				$("#fabricante").val(data.descr_fabricante);
+				$("#codigo_fabricante").val(data.fabricante);
+				$("#costo_unitario").val(data.costo_unitario);
+				$("#precio_unitario").val(data.precio_unitario);
+				$("#costo_caja").val(data.costo_caja);
+				$("#precio_caja").val(data.precio_caja);
+				$("#cantidad_inicial").val(data.cantidad_inicial);
+				$("#tipo_dosis").val(data.tipo_de_dosis);
+				$("#descr_tipo_dosis").val(data.descr_tipo_dosis);
+				$("#antibiotico").val(data.antibiotico);
+				$("#narcotico").val(data.narcotico);
+				$("#preparacion").val(data.preparacion);
+				$("#devolver").val(data.permite_devol);
+				$("#codigo_proveedor").val(data.codigo_proveedor);
+				$("#tipo_volumen").val(data.tipo_volumen);
+				$("#grupo_medicamento").val(data.grupo_medicamento);
+				$("#multiple_principio").val(data.multiple_principio);
+				$("#tipo_impuesto").val(data.tipo_impuesto);
+				$("#estado_med").val(data.estado_med);
+				$("#importacion").val(data.importacion);
+				$("#precio_publico").val(data.precio_publico);
+				$("#jubilado").val(data.jubilado);
+				$("#descuento_total").val(data.descuento_total);
+				$("#cant_max_prov").val(data.cant_max_prov);
+				$("#anaquel").val(data.anaquel);
+				$("#precio_unitario_pub").val(data.precio_unitario_pub);
+				$("#prod_hosp").val(data.prod_hosp);
+				$("#prod_pub").val(data.prod_pub);
+			}
+		});
+		
+		
+		$("#clear").click(function() {
+			$(":input").unautocomplete();
+		});
+		
+		
+		
+	});
+	
+	
 </script>
 
 
 <script language="javascript">
-<!-- Begin
+	<!-- Begin
 	function popUp(URL) {
-	day = new Date();
-	id = day.getTime();
-	eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,width=600,height=600');");
+		day = new Date();
+		id = day.getTime();
+		eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,width=600,height=600');");
 	}
 	
 	
 	
 	function popupform(myform, windowname)
 	{
-	
-	if (! window.focus)return true;
-	
-	window.open('', windowname, 'width=500,height=200, toolbar=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
-	myform.target=windowname;
-	return true;
+		
+		if (! window.focus)return true;
+		
+		window.open('', windowname, 'width=500,height=200, toolbar=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
+		myform.target=windowname;
+		return true;
 	}
 	
 	
-// End -->
+	// End -->
 </script>
 
 <script type="text/javascript">
@@ -651,4 +641,4 @@ $(":input").unautocomplete();
 			window.open(url,'name','height=500,width=600,toolbar=no,directories=no,status=no, menubar=no,scrollbars=no,resizable=no ,modal=yes');
 		}
 	} 
-	</script>		
+	</script>				

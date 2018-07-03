@@ -135,9 +135,9 @@
 			}
 		</script>
 		<script type="text/javascript">
-			$().ready(function() {
+			$(document).ready(function() {
 				
-				$("#form").validate();
+				//$("#form").validate();
 				function log(event, data, formatted) {
 					$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
 				}
@@ -149,58 +149,47 @@
 					return row[0].replace(/(<.+?>)/gi, '');
 				}
 				
-				
-				$("#medicamento").autocomplete("get_medicamento_edit_inv.php", {
-					width: 500,
-					matchContains: true,
-					mustMatch: false,
-					selectFirst: false
-				});
-				
-				$("#codigo_barras").autocomplete("get_barras_edit_inv.php", {
-					width: 500,
-					matchContains: true,
-					mustMatch: false,
-					selectFirst: false
-				});
-				
-				
-				$("#medicamento").result(function(event, data, formatted) {
-					$("#medicamento_id").val(data[1]);
-					$("#inventario_minimo").val(data[2]);
-					$("#inventario_maximo").val(data[3]);
-					$("#inventario_ideal").val(data[4]);
-					$("#inventario_critico").val(data[5]);
-					$("#cantidad_inicial").val(data[6]);
-					$("#cantidad_factura").val(data[7]);
-					$("#cantidad_devolucion").val(data[8]);
-					$("#costo_unitario").val(data[9]);
-					$("#precio_unitario").val(data[10]);
-					$("#porcentaje_ganancia").val(data[11]);
-					$("#codigo_barras").val(data[12]);
-					$("#cantidad_existencia").val(data[13]);
-					$("#precio_unitario_pub").val(data[14]);
-					
-					
+				$("#medicamento").autocomplete({
+					serviceUrl : 'get_medicamento_edit_inv.php',
+					paramName : 'q',
+					onSelect: function (data) {
+						$("#medicamento_id").val(data.codigo_interno);
+						$("#inventario_minimo").val(data.inventario_minimo);
+						$("#inventario_maximo").val(data.inventario_maximo);
+						$("#inventario_ideal").val(data.inventario_ideal);
+						$("#inventario_critico").val(data.inventario_critico);
+						$("#cantidad_inicial").val(data.cantidad_inicial);
+						$("#cantidad_factura").val(data.cantidad_factura);
+						$("#cantidad_devolucion").val(data.cantidad_devolucion);
+						$("#costo_unitario").val(data.costo_unitario);
+						$("#precio_unitario").val(data.precio_unitario);
+						$("#porcentaje_ganancia").val(data.porc_ganancia);
+						$("#codigo_barras").val(data.codigo_de_barra);
+						$("#cantidad_existencia").val(data.cantidad_existencia);
+						$("#precio_unitario_pub").val(data.precio_unitario_pub);						
+					}
 					
 				});
 				
-				$("#codigo_barras").result(function(event, data, formatted) {
-					$("#medicamento").val(data[1]);
-					$("#medicamento_id").val(data[2]);
-					$("#inventario_minimo").val(data[3]);
-					$("#inventario_maximo").val(data[4]);
-					$("#inventario_ideal").val(data[5]);
-					$("#inventario_critico").val(data[6]);
-					$("#cantidad_inicial").val(data[7]);
-					$("#cantidad_factura").val(data[8]);
-					$("#cantidad_devolucion").val(data[9]);
-					$("#costo_unitario").val(data[10]);
-					$("#precio_unitario").val(data[11]);
-					$("#porcentaje_ganancia").val(data[12]);
-					$("#cantidad_existencia").val(data[13]);
-					$("#precio_unitario_pub").val(data[14]);			
-					
+				$("#codigo_barras").autocomplete({
+					serviceUrl : 'get_barras_edit_inv.php',
+					paramName : 'q',
+					onSelect: function (data) {
+						$("#medicamento").val(data.nombre);
+						$("#medicamento_id").val(data.codigo_interno);
+						$("#inventario_minimo").val(data.inventario_minimo);
+						$("#inventario_maximo").val(data.inventario_maximo);
+						$("#inventario_ideal").val(data.inventario_ideal);
+						$("#inventario_critico").val(data.inventario_critico);
+						$("#cantidad_inicial").val(data.cantidad_inicial);
+						$("#cantidad_factura").val(data.cantidad_factura);
+						$("#cantidad_devolucion").val(data.cantidad_devolucion);
+						$("#costo_unitario").val(data.costo_unitario);
+						$("#precio_unitario").val(data.precio_unitario);
+						$("#porcentaje_ganancia").val(data.porc_ganancia);
+						$("#cantidad_existencia").val(data.cantidad_existencia);
+						$("#precio_unitario_pub").val(data.precio_unitario_pub);		
+					}
 					
 				});
 				
@@ -250,4 +239,4 @@
 					window.open(url,'name','height=500,width=600,toolbar=no,directories=no,status=no, menubar=no,scrollbars=no,resizable=no ,modal=yes');
 				}
 			} 
-		</script>		
+		</script>				

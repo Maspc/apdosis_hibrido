@@ -306,9 +306,9 @@
 		
 		
 		<script type="text/javascript">
-			$().ready(function() {
+			$(document).ready(function() {
 				
-				$("#form").validate();
+				//$("#form").validate();
 				function log(event, data, formatted) {
 					$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
 				}
@@ -318,106 +318,96 @@
 				}
 				function formatResult(row) {
 					return row[0].replace(/(<.+?>)/gi, '');
-				}
+				}				
 				
-				
-				$("#medicamento").autocomplete("get_medicamento_edit_us_con.php", {
-					width: 500,
-					matchContains: true,
-					mustMatch: false,
-					selectFirst: false
+				$("#medicamento").autocomplete({
+					serviceUrl : 'get_medicamento_edit_us_con.php',
+					paramName : 'q',
+					onSelect: function (data) {
+						$("#medicamento_id").val(data.codigo_interno);
+						$("#forma_farma").val(data.forma_farma);
+						$("#tipo_posologia").val(data.tipo_posologia);
+						$("#tipo_de_dosis").val(data.tipo_de_dosis);
+						$("#descri_forma").val(data.forma_descri);
+						$("#posologia").val(data.posologia);
+						$("#codigo_barras").val(data.codigo_de_barra);
+						$("#precio_unitario").val(data.precio_unitario);
+						$("#nombre_comercial").val(data.nombre_comercial);
+						$("#nombre_generico").val(data.nombre_generico);
+						$("#presentacion").val(data.descr_presentacion);
+						$("#codigo_presentacion").val(data.presentacion);
+						$("#cantidad_x_empaque").val(data.cantidad_x_empaque);
+						$("#volumen").val(data.volumen);
+						$("#fabricante").val(data.descr_fabricante);
+						$("#codigo_fabricante").val(data.fabricante);
+						$("#costo_unitario").val(data.costo_unitario);
+						$("#precio_unitario").val(data.precio_unitario);
+						$("#costo_caja").val(data.costo_caja);
+						$("#precio_caja").val(data.precio_caja);
+						$("#cantidad_inicial").val(data.cantidad_inicial);
+						$("#tipo_dosis").val(data.tipo_de_dosis);
+						$("#descr_tipo_dosis").val(data.descr_tipo_dosis);
+						$("#antibiotico").val(data.antibiotico);
+						$("#narcotico").val(data.narcotico);
+						$("#preparacion").val(data.preparacion);
+						$("#devolver").val(data.permite_devol);
+						$("#codigo_proveedor").val(data.codigo_proveedor);
+						$("#tipo_volumen").val(data.tipo_volumen);
+						$("#grupo_medicamento").val(data.grupo_medicamento);
+						$("#multiple_principio").val(data.multiple_principio);
+						$("#tipo_impuesto").val(data.tipo_impuesto);
+						$("#precio_publico").val(data.precio_unitario_pub);
+						$("#importacion").val(data.importacion);
+						$("#jubilado").val('');
+						$("#descuento_total").val('');
+						$("#anaquel").val('');
+						$("#tipo_mercancia").val(data.tipo_mercancia);
+					}
 				});
 				
-				$("#codigo_barras").autocomplete("get_barras_edit_us_con.php", {
-					width: 500,
-					matchContains: false,
-					mustMatch: false,
-					selectFirst: true
-				});
-				
-				
-				$("#medicamento").result(function(event, data, formatted) {
-					$("#medicamento_id").val(data[1]);
-					$("#forma_farma").val(data[2]);
-					$("#tipo_posologia").val(data[3]);
-					$("#tipo_de_dosis").val(data[4]);
-					$("#descri_forma").val(data[5]);
-					$("#posologia").val(data[6]);
-					$("#codigo_barras").val(data[7]);
-					$("#precio_unitario").val(data[8]);
-					$("#nombre_comercial").val(data[9]);
-					$("#nombre_generico").val(data[10]);
-					$("#presentacion").val(data[11]);
-					$("#codigo_presentacion").val(data[12]);
-					$("#cantidad_x_empaque").val(data[13]);
-					$("#volumen").val(data[14]);
-					$("#fabricante").val(data[15]);
-					$("#codigo_fabricante").val(data[16]);
-					$("#costo_unitario").val(data[17]);
-					$("#precio_unitario").val(data[18]);
-					$("#costo_caja").val(data[19]);
-					$("#precio_caja").val(data[20]);
-					$("#cantidad_inicial").val(data[21]);
-					$("#tipo_dosis").val(data[22]);
-					$("#descr_tipo_dosis").val(data[23]);
-					$("#antibiotico").val(data[24]);
-					$("#narcotico").val(data[25]);
-					$("#preparacion").val(data[26]);
-					$("#devolver").val(data[27]);
-					$("#codigo_proveedor").val(data[28]);
-					$("#tipo_volumen").val(data[29]);
-					$("#grupo_medicamento").val(data[30]);
-					$("#multiple_principio").val(data[31]);
-					$("#tipo_impuesto").val(data[32]);
-					$("#precio_unitario_pub").val(data[33]);
-					$("#importacion").val(data[34]);
-					$("#jubilado").val(data[35]);
-					$("#descuento_total").val(data[36])
-					$("#anaquel").val(data[37]);
-					$("#tipo_mercancia").val(data[35]);
-				});
-				
-				$("#codigo_barras").result(function(event, data, formatted) {
-					$("#medicamento_id").val(data[1]);
-					$("#forma_farma").val(data[2]);
-					$("#tipo_posologia").val(data[3]);
-					$("#tipo_de_dosis").val(data[4]);
-					$("#descri_forma").val(data[5]);
-					$("#posologia").val(data[6]);
-					$("#medicamento").val(data[7]);
-					$("#precio_unitario").val(data[8]);
-					$("#nombre_comercial").val(data[9]);
-					$("#nombre_generico").val(data[10]);
-					$("#presentacion").val(data[11]);
-					$("#codigo_presentacion").val(data[12]);
-					$("#cantidad_x_empaque").val(data[13]);
-					$("#volumen").val(data[14]);
-					$("#fabricante").val(data[15]);
-					$("#codigo_fabricante").val(data[16]);
-					$("#costo_unitario").val(data[17]);
-					$("#precio_unitario").val(data[18]);
-					$("#costo_caja").val(data[19]);
-					$("#precio_caja").val(data[20]);
-					$("#cantidad_inicial").val(data[21]);
-					$("#tipo_dosis").val(data[22]);
-					$("#descr_tipo_dosis").val(data[23]);
-					$("#antibiotico").val(data[24]);
-					$("#narcotico").val(data[25]);
-					$("#preparacion").val(data[26]);
-					$("#devolver").val(data[27]);
-					$("#medicamento").val(data[28]);
-					$("#codigo_proveedor").val(data[29]);
-					$("#tipo_volumen").val(data[30]);
-					$("#grupo_medicamento").val(data[31]);
-					$("#multiple_principio").val(data[32]);
-					$("#tipo_impuesto").val(data[33]);
-					$("#precio_unitario_pub").val(data[34]);
-					$("#importacion").val(data[35]);
-					$("#jubilado").val(data[36]);
-					$("#descuento_total").val(data[37])
-					$("#anaquel").val(data[38]);
-					$("#tipo_mercancia").val(data[36]);
-					
+				$("#codigo_barras").autocomplete({
+					serviceUrl : 'get_barras_edit_us_con.php',
+					paramName : 'q',
+					onSelect: function (data) {
+						$("#medicamento_id").val(data.codigo_interno);
+						$("#forma_farma").val(data.forma_farma);
+						$("#tipo_posologia").val(data.tipo_posologia);
+						$("#tipo_de_dosis").val(data.tipo_de_dosis);
+						$("#descri_forma").val(data.forma_descri);
+						$("#posologia").val(data.posologia);
+						$("#medicamento").val(data.nombre);
+						$("#precio_unitario").val(data.precio_unitario);
+						$("#nombre_comercial").val(data.nombre_comercial);
+						$("#nombre_generico").val(data.nombre_generico);
+						$("#presentacion").val(data.descr_presentacion);
+						$("#codigo_presentacion").val(data.presentacion);
+						$("#cantidad_x_empaque").val(data.cantidad_x_empaque);
+						$("#volumen").val(data.volumen);
+						$("#fabricante").val(data.descr_fabricante);
+						$("#codigo_fabricante").val(data.fabricante);
+						$("#costo_unitario").val(data.costo_unitario);
+						$("#precio_unitario").val(data.precio_unitario);
+						$("#costo_caja").val(data.costo_caja);
+						$("#precio_caja").val(data.precio_caja);
+						$("#cantidad_inicial").val(data.cantidad_inicial);
+						$("#tipo_dosis").val(data.tipo_de_dosis);
+						$("#descr_tipo_dosis").val(data.descr_tipo_dosis);
+						$("#antibiotico").val(data.antibiotico);
+						$("#narcotico").val(data.narcotico);
+						$("#preparacion").val(data.preparacion);
+						$("#devolver").val(data.permite_devol);
+						$("#codigo_proveedor").val(data.codigo_proveedor);
+						$("#tipo_volumen").val(data.tipo_volumen);
+						$("#grupo_medicamento").val(data.grupo_medicamento);
+						$("#multiple_principio").val(data.multiple_principio);
+						$("#tipo_impuesto").val(data.tipo_impuesto);
+						$("#precio_publico").val(data.precio_unitario_pub);
+						$("#importacion").val(data.importacion);
+						$("#jubilado").val('');
+						$("#descuento_total").val('');
+						$("#anaquel").val('');
+						$("#tipo_mercancia").val(data.tipo_mercancia);
+					}
 				});
 				
 				
@@ -466,4 +456,4 @@
 					window.open(url,'name','height=500,width=600,toolbar=no,directories=no,status=no, menubar=no,scrollbars=no,resizable=no ,modal=yes');
 				}
 			} 
-		</script>		
+		</script>				
